@@ -124,6 +124,7 @@ and the people around it. If you're new to storyboarding, read
 [this explanation](https://www.nngroup.com/articles/storyboards-visualize-ideas/).
 
 **Include pictures of your storyboards here.**
+
 <img width="560" height="353" alt="image" src="https://github.com/user-attachments/assets/d1bfe396-2d60-43c3-936b-043163bb0979" />
 <img width="629" height="351" alt="image" src="https://github.com/user-attachments/assets/f2932d38-7d41-4568-af9e-2da0cb6935a2" />
 <img width="629" height="352" alt="image" src="https://github.com/user-attachments/assets/40440a3b-ebc7-4471-aee7-85d1111e1356" />
