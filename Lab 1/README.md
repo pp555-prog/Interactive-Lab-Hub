@@ -89,8 +89,11 @@ the interaction*:
 
   Sometimes the details of how the interaction worked are lost in history. Try filling it in with your imagination!
 
-**Describe your masterwork here, in your own words. What is the core interaction
-someone would recognize it by?**
+Before the Fresnel lens, a lighthouse was a bright object. Oil lamps scattered light in every direction, so most of it was wasted and the useful range was short. Fresnel's lens, first installed at Cordouan in 1823, collapsed that scatter into a concentrated beam and put it on a rotating mount. The consequence was not just distance. It was legibility. A rotating beam reads from the water as a rhythm of flashes, and every lighthouse was given its own period and sequence. The light stopped being a glow and became a name.
+
+That is the core interaction. The lighthouse never responds to you, never knows you are there, and gives you no acknowledgment, yet it answers the most urgent question a sailor has: where am I, and what is about to kill me. The input is your own position. You move along the coast, you count the interval between flashes, you match it against a chart, and the light resolves into an identity and a fix. Sectored lights push this further: the same lamp shows white when you are in the safe channel and red when you have drifted onto the hazard, so the light appears to change in direct response to you while doing nothing at all.
+
+Its strength is that one unattended device serves everyone in range simultaneously, in the dark, at distance, with no shared language. Its weaknesses follow from the same design: no feedback that the message landed, fog erases it, and misreading one signature for another has sunk ships.
 
 ## Part A. Plan
 
