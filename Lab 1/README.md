@@ -108,6 +108,13 @@ For your masterwork, reconstruct the interaction as a scene:
 
 **Describe your setting, players, activity, and goals here.**
 
+The setting is a rocky coastline at night, sometime in the 1830s, with fog thickening. A small cargo schooner is running for a harbor entrance that is guarded by a reef on one side and a shoal on the other. The only visible thing in the world is a single light on the headland, several miles off. Nobody is at the lighthouse in the scene; the keeper trimmed the lamp hours ago and is asleep. This absence matters, because the piece has to feel like an interaction with something that is not attending to you.
+
+The players are the helmsman, who steers and cannot look away from the water; the navigator, who holds the chart, a watch, and the authority to say what the light means; and a deckhand or passenger who can see the same light but cannot read it, and who therefore voices the audience's confusion. The light itself is the fourth player and the only one with no intentions.
+
+The activity is a reading, not a conversation. The navigator sights the light, counts the interval between flashes aloud, and matches the signature against the chart to establish which headland this is and therefore where the ship is. Once the fix is made, the sector does the rest: the light shows white while the ship holds the safe channel and turns red the moment it drifts toward the reef. The navigator calls a correction, the helmsman turns, and the light goes white again. That loop is the beat we want an audience to recognize, because it looks like the lighthouse is answering the ship while it is in fact just sitting there being sliced by geometry.
+
+The goals split cleanly. The navigator wants identity first and position second, and is willing to spend nervous seconds counting to get it. The helmsman wants a heading he can trust and wants it now, so his pressure on the navigator is the source of the scene's tension. The deckhand wants reassurance and gets none, since the light offers no acknowledgment that anyone saw it. And the lighthouse, if we grant it a goal, wants only to be unmistakable, which is a strange kind of goal: it is designed to be identified rather than understood, and it never learns whether it worked.
 Now **sketch a 3 storyboards** of the interaction you are recreating. (The number may depend on the thing you drew, but stretch your thinking!) They
 don't need to be beautiful, but they must capture and communicate not only the behavior of the light, but how it affects
 and the people around it. If you're new to storyboarding, read
