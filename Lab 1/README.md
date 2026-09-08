@@ -140,8 +140,11 @@ is doing what you've scripted — a person can wave a flashlight, or you can nar
 it aloud.
 
 **Are there things that seemed better on paper than when acted out?**
+The biggest gap between the storyboard and the floor was directionality. On paper we drew the beam as a wedge sweeping across the water, which reads instantly in a static frame. A phone screen does not do that. It emits light, it does not throw a beam, so what the audience actually saw was a glowing rectangle changing color rather than a rotating shaft of light picking us out of the dark. The whole premise of Storyboard B, that the light finds you and tells you where you are, depends on the beam having a direction and a footprint on the water. We could not stage that with a flat panel.
+The related problem was distance. In the storyboard the light is miles off and tiny, which is what forces the navigator to count carefully. In a room the light is a few feet away and unmistakable, so the counting looked like stalling rather than the difficult perceptual work it actually is. The tension in the scene comes from the light being at the edge of legibility, and we lost that as soon as it was close and bright.
 
 **Did new ideas about the piece surface once you were on your feet?**
+The first was that we started reaching for AI video effects, specifically Seedance, to fake the rotating beam and the fog we could not stage physically. We talked ourselves out of it for this week. The lab is explicit that the grade rides on the light itself being recognizable, and that other modalities are next week's business. Generating a beam in post would mean the beam is not part of the interaction at all, it is decoration added after the fact, and the wizard would no longer be driving anything the actors respond to live. If we use it, it belongs in Part 2 as a deliberate remix rather than as a patch over a staging problem.
 
 **Are there key moments in the interaction where things could go in a different direction?**
 Iterate your storyboards to capture key non-sequential aspects of the interaction. 
@@ -170,7 +173,7 @@ building any real electronics. (Zoom works well for recording; you can pin the
 video feed of whichever scene you want to capture.)
 
 **Include your first attempts at recording the wizarded set-up here.**
-
+https://cornellprod-my.sharepoint.com/:f:/g/personal/pp555_cornell_edu/IgDy-ckwbK1bQbIzkv5L_KUCAbGI49-JEIkt0-1D8ybMnho?e=Icf386
 ## Part E. (optional) Costume the Device
 
 Only now should you worry about what the device looks like. Costume your phone so it reads
@@ -192,6 +195,7 @@ the top of this lab: a viewer who knows the piece should recognize it; a viewer
 who doesn't should come away understanding what it's famous for. How might you illustrate the non-sequential aspects of the interaction in the sketch?
 
 **Include your video here.**
+https://cornellprod-my.sharepoint.com/:f:/g/personal/pp555_cornell_edu/IgDy-ckwbK1bQbIzkv5L_KUCAbGI49-JEIkt0-1D8ybMnho?e=Icf386
 
 **Please indicate who you collaborated with on this lab.** Be generous in
 acknowledging their contributions, and credit any other influences (YouTube,
