@@ -173,7 +173,9 @@ building any real electronics. (Zoom works well for recording; you can pin the
 video feed of whichever scene you want to capture.)
 
 **Include your first attempts at recording the wizarded set-up here.**
+
 https://cornellprod-my.sharepoint.com/:f:/g/personal/pp555_cornell_edu/IgDy-ckwbK1bQbIzkv5L_KUCAbGI49-JEIkt0-1D8ybMnho?e=Icf386
+
 ## Part E. (optional) Costume the Device
 
 Only now should you worry about what the device looks like. Costume your phone so it reads
@@ -195,6 +197,7 @@ the top of this lab: a viewer who knows the piece should recognize it; a viewer
 who doesn't should come away understanding what it's famous for. How might you illustrate the non-sequential aspects of the interaction in the sketch?
 
 **Include your video here.**
+
 https://cornellprod-my.sharepoint.com/:f:/g/personal/pp555_cornell_edu/IgDy-ckwbK1bQbIzkv5L_KUCAbGI49-JEIkt0-1D8ybMnho?e=Icf386
 
 **Please indicate who you collaborated with on this lab.** Be generous in
