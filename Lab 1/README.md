@@ -149,6 +149,10 @@ The first was that we started reaching for AI video effects, specifically Seedan
 **Are there key moments in the interaction where things could go in a different direction?**
 Iterate your storyboards to capture key non-sequential aspects of the interaction. 
 
+The storyboard used during the actual video is an extremely shortened version of the whole story. The interaction we intended to have included the one between the light and sailors, and the one between the light and the lighthouse keepers. For the prior one, the light makes it very easy to identify lighthouses at night. Also, the light could serve as a better indicator of potential dangers near shore. For lighthouse keepers, the Fresnel lens allowed them to manipulate the light much more easily. It not only greatly reduced the overall weight of the machine but also improved the light's power. 
+Among those two key interactions, we decided to shorten the story and only present part of it. There are long stories behind them, and the materials we used were quite limited. 
+
+
 ## Part C. Prototype the Light (light first!)
 
 Use your smartphone as the light of your device. Open the browser on your phone
@@ -188,7 +192,13 @@ and calm for a bedroom?
 
 **Include sketches/photos of what your device might look like here.**
 
+<img width="791" height="461" alt="image" src="https://github.com/user-attachments/assets/ec23457f-86c0-4e25-96f9-408dac132382" />
+
+We made a paper lighthouse, with another paper to produce a scattered fog effect. We can dig a hole on the paper where the letter O is, to show the idea of concentrating the light as light beams rather than scattered light. 
+
 **What concerns or opportunities shaped the way you designed its look?**
+
+One of the concerns is that the light from a lighthouse is more like a point light. In contrast, the phone produces a plane light. Therefore, we decided to use origami to symbolize the structure of the lighthouse, and use the phone to reveal its contour in the dark for better representation. 
 
 ## Part F. Record
 
@@ -203,6 +213,8 @@ https://cornellprod-my.sharepoint.com/:f:/g/personal/pp555_cornell_edu/IgDy-ckwb
 **Please indicate who you collaborated with on this lab.** Be generous in
 acknowledging their contributions, and credit any other influences (YouTube,
 Github, Twitter, a friend who lent you a lamp) that informed your recreation.
+
+We watched tutorials on how to make origami for a boat and lighthouse. We also borrowed a figure from Splendor, the board game, as our crew. 
 
 ---
 
