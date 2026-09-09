@@ -241,6 +241,14 @@ your response engages with what your master was really doing.
 **Document everything here — especially the storyboard and video. Photos of the
 prototype are great too.**
 
+<img width="623" height="343" alt="image" src="https://github.com/user-attachments/assets/c8f06fd7-dabb-4b23-bb6b-133c1c2d0562" />
+
+https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%201%20Videos?d=w30c9f9f2ad6c415bb23392fe4bfca502&csf=1&web=1&e=Ovdzcx
+
+We chose to push a strength further. In Part 0 we argued that the Fresnel lens's achievement was not brightness but legibility, turning a glow into a signal that could be read at distance. Our first recreation showed a lighthouse working. It never showed why the lens mattered, because there was nothing to compare it against. So for the second pass we recreated the invention itself rather than the finished object.
+The remix runs the same miniature through a single transformation. For the first twenty seconds the light behaves like a pre-1823 lamp: a warm scattered glow spilling in every direction, falling off so fast it dies before it reaches the paper boat, leaving the ship in darkness and the table in a muddy wash with no edges and nothing legible. Then, as the wizard moves the phone, the scatter collapses into a single narrow hard-edged shaft of cold white light that reaches the boat, lights it sharply, and throws one long black shadow across the table. Everything outside the beam gets darker than it was before, because the spill is gone. That last detail is the whole point. Concentration is not more light, it is the same light sent one direction at the cost of every other direction, and we wanted an audience to feel the trade rather than be told about it.
+Technically this is the same footage from week one with the light behavior replaced. We kept the plate untouched: same camera, same table, same paper boat, same cardboard tower, same room. We kept the original audio rather than scoring it, because our Part 0 argument was that the lighthouse gives no acknowledgment, and a musical cue on the transformation would hand the audience a confirmation the light itself refuses to give.
+
 ---
 
 
