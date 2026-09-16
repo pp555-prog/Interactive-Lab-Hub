@@ -1,5 +1,5 @@
 # Interactive Prototyping: The Clock of Pi
-**Pablo Penlba & Yuchen Xing**
+**Pablo Penalba & Yuchen Xing**
 
 Does it feel like time is moving strangely during this semester?
 
