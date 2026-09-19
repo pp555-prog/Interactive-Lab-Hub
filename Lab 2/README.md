@@ -198,7 +198,11 @@ We strongly discourage literal digital or analog clock display: Be creative.
 
 ** Insert ideas, sketches, [Verplank diagrams](https://ccrma.stanford.edu/courses/250a-fall-2004/IDSketchbok.pdf)), storyboards for your ideas **
 
+
+IDEA 1. The Daylight / Energy Clock represents time as progress through the day rather than as a conventional numerical clock. A sun/moon arc, changing screen brightness, and a servo pointer communicate how far the day has progressed. The rotary encoder lets the user switch between representations such as daylight remaining, focus blocks, and sunset countdown, while pressing it can briefly reveal the exact time. The ambient-light sensor allows the clock to adapt as the room gets darker.
 <img width="945" height="710" alt="image" src="https://github.com/user-attachments/assets/88476f4f-4400-4450-b391-80adfdf6aaff" />
+
+IDEA 2. The Soundscape Clock represents time primarily through sound. Different parts of the day have distinct soundscapes, and the rotary encoder lets the user “scrub” backward and forward through the day like moving through a song timeline. The Mini PiTFT and servo provide visual and physical feedback, while the Bluetooth speaker changes the sound as the represented time changes. Pressing the encoder returns the system to the present moment and can briefly reveal the exact time.
 <img width="943" height="710" alt="image" src="https://github.com/user-attachments/assets/36bf85d4-6bb4-4a3a-84df-e92704c3a45d" />
 
 
