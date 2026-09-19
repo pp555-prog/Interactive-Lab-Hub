@@ -203,7 +203,8 @@ IDEA 1. The Daylight / Energy Clock represents time as progress through the day 
 <img width="945" height="710" alt="image" src="https://github.com/user-attachments/assets/88476f4f-4400-4450-b391-80adfdf6aaff" />
 
 IDEA 2. The Soundscape Clock represents time primarily through sound. Different parts of the day have distinct soundscapes, and the rotary encoder lets the user “scrub” backward and forward through the day like moving through a song timeline. The Mini PiTFT and servo provide visual and physical feedback, while the Bluetooth speaker changes the sound as the represented time changes. Pressing the encoder returns the system to the present moment and can briefly reveal the exact time.
-<img width="943" height="710" alt="image" src="https://github.com/user-attachments/assets/36bf85d4-6bb4-4a3a-84df-e92704c3a45d" />
+<img width="864" height="645" alt="image" src="https://github.com/user-attachments/assets/598de600-0ccb-4126-aac9-2d8a1d8e5546" />
+
 
 
 **Put the names of the people you gave feedback to here. (Even better, add links to their repos here!)**
