@@ -221,6 +221,8 @@ Yuchen Xing
 2. Look at and give feedback on the Part E. for at least 3 other people in the class and get 3 people to comment on your Part E!)
 **Put the feedback for your ideas here.**
 
+Yuchen Xing: I think those two ideas are very creative. Personally, I'm looking forward to the first one, because I would like to see how much progress do I have till the day ends without calculating the hours.
+
 ## Update your Lab Hub
 
 [Update your Lab Hub](pull_updates/README.md) to get the latest content and requirements for Part 2.
