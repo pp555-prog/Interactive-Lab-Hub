@@ -290,6 +290,7 @@ Do take advantage of having done the previous iteration to refine and simplify y
 
 \*\*\***Take a video of your PiClock.**\*\*\*
 
+https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos?d=wdd126cd46cfd46c58dc8201fcc7e8c0b&csf=1&web=1&e=LkzvEn
 
 As always, make sure you document contributions and ideas from others (and AI) explicitly in your writeup.
 
