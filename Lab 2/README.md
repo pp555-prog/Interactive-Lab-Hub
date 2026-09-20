@@ -233,6 +233,21 @@ Start small, pick just one element of your overall idea, just to show you have a
 
 \*\*\***Put a copy of your code in your Lab 2 Github repo.**\*\*\*
 
+
+  My modified PiClock code is included in this Lab 2 repository:
+
+  - [Main clock script](screen_clock.py)
+  - [Audio playback](audio_output.py)
+  - [Audio generator](generate_audio.py)
+  - [Screen tests](test_screen_clock.py)
+  - [Audio tests](test_audio_output.py)
+  - [Generated sound assets](assets/audio/)
+  - [Project documentation](PROJECT_DESIGN.md)
+
+  The clock displays MORNING, DAY, EVENING, and NIGHT. The optional `--audio`
+  flag plays period-specific loops through the USB speaker, while night remains
+  silent. Speaker disconnection does not stop the display.
+
 ## Make a short video of your modified barebones PiClock
 
 \*\*\***Take a video of your barely modified PiClock.**\*\*\*
@@ -257,6 +272,21 @@ Do take advantage of having done the previous iteration to refine and simplify y
 
 
 \*\*\***Put a copy of your code in your Lab 2 Github repo.**\*\*\*
+
+
+  My modified PiClock code is included in this Lab 2 repository:
+
+  - [Main clock script](screen_clock.py)
+  - [Audio playback](audio_output.py)
+  - [Audio generator](generate_audio.py)
+  - [Screen tests](test_screen_clock.py)
+  - [Audio tests](test_audio_output.py)
+  - [Generated sound assets](assets/audio/)
+  - [Project documentation](PROJECT_DESIGN.md)
+
+  The clock displays MORNING, DAY, EVENING, and NIGHT. The optional `--audio`
+  flag plays period-specific loops through the USB speaker, while night remains
+  silent. Speaker disconnection does not stop the display.
 
 \*\*\***Take a video of your PiClock.**\*\*\*
 
