@@ -338,8 +338,6 @@ Check that every line is readable and fits the screen. Restore the service with
 `sudo systemctl start piscreen.service` if it was active before review.
 Do not change the system clock.
 
-Initial modification video: **pending capture and link**.
-Later soundscape video: **audio implemented; capture pending**.
 
 ### Phase 2: USB period audio
 
