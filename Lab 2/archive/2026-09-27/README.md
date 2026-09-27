@@ -1,8 +1,6 @@
 # Interactive Prototyping: The Clock of Pi
 **Pablo Penalba**
 
-> **Closed 2026-09-27:** Pablo confirmed Lab 2 is complete. The assignment and submitted evidence below are preserved. See [closeout status](PROGRESS.md) and [final design](PROJECT_DESIGN.md). Earlier feature roadmaps are historical.
-
 Does it feel like time is moving strangely during this semester?
 
 For our first Pi project, we will pay homage to the [timekeeping devices of old](https://en.wikipedia.org/wiki/History_of_timekeeping_devices) by making simple clocks.
@@ -45,11 +43,11 @@ C) [Set up your RGB display](#part-c)
 
 D) [Try out clock_display_demo](#part-d) 
 
-E) [Modify the code to make the display your own](#modify-the-barebones-clock-to-make-it-your-own)
+E) [Modify the code to make the display your own](#part-e)
 
-F) [Make a short video of your modified barebones PiClock](#make-a-short-video-of-your-modified-barebones-piclock)
+F) [Make a short video of your modified barebones PiClock](#part-f)
 
-G) [Sketch and brainstorm further interactions and features](#design-concepts)
+G) [Sketch and brainstorm further interactions and features you would like for your clock for Part 2.](#part-g)
 
 ## The Report
 This readme.md page in your own repository should be edited to include the work you have done. You can delete everything but the headers and the sections between the \*\*\***stars**\*\*\*. Write the answers to the questions under the starred sentences. Include any material that explains what you did in this lab hub folder, and link it in the readme.
@@ -189,8 +187,6 @@ Option 3. A nowadays often preferred method is to use Microsoft [VS code to remo
 
 Pro Tip: Using tools like [code-server](https://coder.com/docs/code-server/latest) you can even setup a VS Code coding environment hosted on your raspberry pi and code through a web browser on your tablet or smartphone! 
 
-<a id="design-concepts"></a>
-
 ## Part E. Read Part 2. Sketch and brainstorm further interactions and features you would like for your clock.
 
 One potential source of ideas might be thinking about other clocks and timekeeping devices for inspiration.
@@ -298,71 +294,122 @@ https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents
 
 As always, make sure you document contributions and ideas from others (and AI) explicitly in your writeup.
 
-You are permitted (but not required) to work in groups and share a turn in; you are expected to make equal contribution on any group work you do, and N people's group project should look like N times the work of a single person's lab.  Make sure the page for the group turn in is linked to your personal Interactive Lab Hub page.
+You are permitted (but not required) to work in groups and share a turn in; you are expected to make equal contribution on any group work you do, and N people's group project should look like N times the work of a single person's lab.  Make sure the page for the group turn in is linked to your personal Interactive Lab Hub page. 
+
+
+
 
 ## PiClock implementation and evidence
 
-The delivered prototype displays LIVE, local time, and MORNING (05:00–11:00),
-DAY (11:00–17:00), EVENING (17:00–21:00), or NIGHT (21:00–05:00).
-These periods are expressive rather than astronomical. Optional `--audio` plays
-original period-specific USB sound loops; NIGHT is silent. The report above
-contains the submitted photos, concept sketches, feedback, and video-folder links.
-Those links are retained; recording contents and sharing permissions were not
-independently checked during closeout.
+The current prototype displays LIVE, local time, and one of four fixed periods:
+MORNING (05:00–11:00), DAY (11:00–17:00), EVENING (17:00–21:00),
+and NIGHT (21:00–05:00). These periods are expressive rather than astronomical.
+See [project design](PROJECT_DESIGN.md) and [progress](PROGRESS.md).
 
-### Running the completed prototype
+### Phase 1 validation
 
-On the Pi, record the current state of `piscreen.service` and ensure no other
-custom display process is running before starting the clock:
+On 2026-09-20, all four tests in test_screen_clock passed again on the Pi,
+including period boundaries, every minute of the day, invalid inputs, and text bounds.
+The earlier hardware display-write smoke tests passed on 2026-09-19.
+Physical readability, orientation, contrast, and video evidence are still pending.
+
+Run the logic/render tests:
 
 ```bash
 cd ~/Interactive-Lab-Hub/"Lab 2"
-systemctl is-active piscreen.service
+~/venv/bin/python -m unittest -v test_screen_clock
+```
+
+For physical review, record the original state of piscreen.service and ensure no
+other custom display process is running. Stop the service before using the clock.
+Run each of these in order while recording the TFT:
+
+```bash
+sudo systemctl stop piscreen.service
+~/venv/bin/python screen_clock.py --test-time 05:00 --frames 11
+~/venv/bin/python screen_clock.py --test-time 11:00 --frames 11
+~/venv/bin/python screen_clock.py --test-time 17:00 --frames 11
+~/venv/bin/python screen_clock.py --test-time 21:00 --frames 11
+~/venv/bin/python screen_clock.py --frames 11
+```
+
+The first four segments are labeled SIMULATED; the last shows live local time.
+Check that every line is readable and fits the screen. Restore the service with
+`sudo systemctl start piscreen.service` if it was active before review.
+Do not change the system clock.
+
+
+### Phase 2: USB period audio
+
+The connected Jieli UACDemoV1.0 USB speaker was audibly confirmed by the student.
+Bluetooth pairing is no longer required. Audio is optional: add `--audio` to the
+existing clock command. Without that flag, the clock stays screen-only.
+
+```bash
+cd ~/Interactive-Lab-Hub/"Lab 2"
+# Record service state first; stop any other custom clock before running.
 sudo systemctl stop piscreen.service
 ~/venv/bin/python screen_clock.py --audio
-# Ctrl+C stops the owned player and releases the display resources.
-# Restore piscreen.service only if it was active before this run:
+# Ctrl+C stops the owned player and releases display resources.
+# Restore this service only if it was active before the run:
 sudo systemctl start piscreen.service
 ```
 
-Omit `--audio` for screen-only operation. For a bounded, labeled demonstration,
-use `--audio --test-time 05:00 --frames 12`; 11:00, 17:00, and 21:00 select the
-other periods. Do not change the system clock. These commands are reference
-instructions, not unfinished Lab 2 tasks.
+Use `--audio --test-time 05:00 --frames 12` for a labeled morning preview;
+11:00, 17:00, and 21:00 select day, evening, and silent night. No clock changes
+are needed. Morning is sparse, day has more frequent notes, and evening is slower.
+Each original generated WAV lasts eight seconds and loops through installed
+ffplay using PipeWire's PulseAudio compatibility layer. Unchanged periods keep
+the same player; transitions stop the previous player before starting another.
+The exact USB sink name is in audio_output.py. No default/system volume or
+startup service settings are changed. Adjust the speaker's controls as needed.
 
-Playback uses ffplay through PipeWire's PulseAudio compatibility layer. One child
-owns playback; unchanged periods keep the player, and transitions stop it first.
-Missing speaker/assets/tools leave the screen running, retrying every five seconds.
-The Jieli USB sink is configured in `audio_output.py`; a different speaker requires
-rechecking that configuration. System volume and startup settings are not changed.
-See [audio credits](assets/audio/README.md) for the original synthesized assets.
+Missing speaker, asset, or playback tools leave the display running. Availability
+and failed playback are retried every five seconds; checks have a half-second
+timeout. Reconnecting the same USB device should resume the current non-night
+period. A different speaker requires updating the sink name. Playback cleanup
+terminates the owned process and kills it if it does not exit promptly.
 
-### Verification record and final scope
+Assets are original mathematically synthesized tones generated by Codex; no
+third-party recordings are included. Rebuild with `~/venv/bin/python generate_audio.py`.
+The student found the first loops too quiet; their amplitude was increased from
+6500 to 20000 (about 10 dB), leaving system volume unchanged. The student confirmed the revised volume is comfortable.
 
-Historical Pi checks on 2026-09-19/20 passed all ten screen/audio tests, including
-period boundaries, every minute of the day, text bounds, playback transitions,
-failure handling, and cleanup. Actual TFT writes and USB routing were checked.
-The student confirmed comfortable volume and sound recovery after physical USB
-reconnection while the screen stayed visible. Service state was restored afterward.
+Validation: all 10 screen/audio tests passed. Live USB routing and unchanged
+player identity were verified for 10 seconds per period, beyond each loop length;
+night stopped playback. All four simulated TFT/audio runs, screen-only LIVE output, a missing-sink TFT
+run, and Ctrl+C child cleanup also passed. Physical USB disconnect/reconnect subsequently passed (see acceptance below);
+the demo video remains pending. Screen readability remains a separate student review item.
 
 ```bash
 ~/venv/bin/python -m unittest -v test_screen_clock test_audio_output
 ```
 
-These are recorded prior results. The Pi was unreachable by its historical hostname
-at closeout, so current hardware state and visual quality were not revalidated.
-The earlier recording TODOs are superseded by the video links already in this report.
-Encoder scrubbing, servo control, and Bluetooth are unused proposals. Ambient sensing
-exists only as a separate local experiment and is not in this published implementation.
-Lab 2 is closed; these proposals are not a continuation checklist.
+Encoder, servo, and ambient sensing remain deferred until audio acceptance.
 
 ### AI contribution
 
-Codex helped organize the design; preserved and extended the student's numerical
-clock; implemented period rendering, simulated-time controls, optional USB playback,
-and tests; synthesized the original WAVs; and performed the historical SSH-based
-checks recorded in [PROGRESS.md](PROGRESS.md). Earlier ChatGPT assistance contributed
-design ideas and suggested display code. The student confirmed audio behavior and
-provided the report evidence. On 2026-09-27 Codex reconciled the final GitHub report
-with local notes, archived stale instructions, and prepared the Lab 3 handoff without
-changing application code. Completion is student-confirmed; grading is not asserted.
+Codex helped organize the design, preserved and extended the student's numerical
+clock, implemented period mapping and rendering, added simulated-time controls
+and automated tests, and ran tests and display-write checks over SSH.
+On 2026-09-20 Codex reran the four tests, inspected audio availability, and added
+these evidence and review instructions. Physical student review and recordings
+remain pending; successful display writes alone do not establish visual quality.
+
+On 2026-09-20 Codex implemented optional USB period audio, synthesized original
+WAV loops, added failure/transition tests, and verified live USB playback routing.
+The student confirmed the initial USB test tones and requested louder period
+loops. Phase 1 screen review and all demonstration recordings remain pending.
+
+
+### Physical audio acceptance ? 2026-09-20
+
+Student confirmed the revised louder tones are comfortable. During the physical
+USB reconnect test, monitoring detected removal at 28.4 seconds, reappearance at
+42.6 seconds, and a RUNNING USB sink with routed playback at 43.6 seconds (about
+one second after detection). The clock process remained running throughout.
+Student confirmed sound returned and the screen stayed visible. Test playback
+was stopped and the originally active piscreen.service restored afterward.
+This supersedes earlier pending volume and physical reconnect notes. Complete
+four-period visual review and demonstration recordings remain pending; next
+hardware milestone is encoder identification and pin/wiring inspection.
