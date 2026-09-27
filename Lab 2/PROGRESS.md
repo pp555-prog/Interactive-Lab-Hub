@@ -12,7 +12,7 @@ The next active project is Lab 3, Chatterboxes. No Lab 2 feature work is queued.
   peer feedback, source links, and SharePoint video-folder links. The hub already
   links Lab 2 and Lab 3. See [the report](README.md).
 - This closeout changes documentation only. The final closeout commit is available
-  in Git history; its parent is the inspected submission above.
+  in Git history, followed by the Pi synchronization documentation update.
 
 ## Delivered scope and verification
 
@@ -23,7 +23,7 @@ The next active project is Lab 3, Chatterboxes. No Lab 2 feature work is queued.
 | Optional USB soundscapes with silent NIGHT | Implemented, using original generated WAV loops |
 | Speaker loss/recovery and cleanup | Automated checks plus recorded physical reconnect acceptance |
 | Encoder scrubbing, servo pointer, Bluetooth integration | Historical proposals; outside the closed scope |
-| Ambient-light adaptation | Separate Windows experiment; absent from inspected published code |
+| Ambient-light adaptation | Pi and Windows experiment; preserved in backups, outside published scope |
 
 Historical checks from 2026-09-19/20: four screen tests and six audio tests passed
 on the Pi, including all 1,440 minutes, period boundaries, text bounds, transitions,
@@ -42,20 +42,29 @@ independently verified satisfaction of every assignment requirement.
 
 The Windows workspace contains `ambient_input.py`, `test_ambient_input.py`, and
 a `screen_clock.py` with `--ambient`, unlike the published version. They remain
-preserved locally and were not merged into the finished submission. Historical
+preserved locally and were not merged into the finished submission. The Pi also
+contained this experiment in commit `09d2f43d22f4fde19bc1740c94bbfde0f3158bee`,
+now retained on `backup/lab2-ambient-20260927`. Historical
 notes describe hardware-free checks and a sensor-absent fallback run, not verified
 physical bright/dark behavior. The supplied digital backlight uses on/off output,
 so the experiment does not establish continuously variable physical brightness.
 
 ## Pi and recovery context
 
-- Historical SSH target: `pi@pablo98pi`, using the existing SSH key.
-- Pi repository: `/home/pi/Interactive-Lab-Hub`; Lab 2 is its `Lab 2` directory.
-- Lab 2 Python: `/home/pi/venv/bin/python`; timezone last verified as `US/Eastern`.
-- Last recorded service state (2026-09-20): `piscreen.service` restored to active;
-  no custom clock/player intentionally left running.
-- At closeout the hostname could not be resolved. Current Pi files, processes,
-  and service state remain unverified; no Pi synchronization was performed.
+- SSH reverified 2026-09-27: `pi@pablo98pi.local`, IP `100.110.200.223`, using the existing key.
+- Pi repository: `/home/pi/Interactive-Lab-Hub`, branch `Fall2026`, synchronized
+  to the GitHub closeout; Lab 3 assignment and setup script are present.
+- Lab 2 Python: `/home/pi/venv/bin/python`; timezone previously verified as `US/Eastern`.
+- `piscreen.service` is active and runs `/home/pi/screen_boot_script.py` outside
+  the repository. No custom Lab 2 clock or ffplay process was found.
+- Initial hostname failures were followed by restored access. The cause of the
+  earlier blank screen was not established; this synchronization did not change
+  service configuration or claim to repair it.
+- Original Pi branch retained as `archive/lab2-pi-before-closeout-20260927`.
+- Backups: `/home/pi/piclock-backups/20260927-closeout/lab2-before-sync.bundle`
+  (complete Git history) and `lab2-files.tar.gz` (Lab 2 directory snapshot).
+  Both were copied to Windows `Lab 2/Workspace/pi-backups/20260927-closeout/`;
+  SHA-256 checksums match. The Git bundle passed verification.
 - Original backups remain under `/home/pi/piclock-backups/`, including
   `20260919-131109/screen_clock.py` and `20260920-144439-audio`.
 

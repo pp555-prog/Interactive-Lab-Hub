@@ -349,11 +349,13 @@ reconnection while the screen stayed visible. Service state was restored afterwa
 ~/venv/bin/python -m unittest -v test_screen_clock test_audio_output
 ```
 
-These are recorded prior results. The Pi was unreachable by its historical hostname
-at closeout, so current hardware state and visual quality were not revalidated.
+These are recorded prior results. Pi access was restored later on 2026-09-27;
+the display service was active and the repository was safely synchronized after
+backing up the ambient experiment. Visual quality and audio were not retested.
 The earlier recording TODOs are superseded by the video links already in this report.
 Encoder scrubbing, servo control, and Bluetooth are unused proposals. Ambient sensing
-exists only as a separate local experiment and is not in this published implementation.
+was preserved from both the Pi and Windows as a separate experiment; it is not
+part of this published implementation. See PROGRESS.md for recovery locations.
 Lab 2 is closed; these proposals are not a continuation checklist.
 
 ### AI contribution

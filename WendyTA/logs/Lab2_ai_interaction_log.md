@@ -20,3 +20,18 @@
 ### Next Steps
 - Begin Lab 3 from its assignment and prep instructions in the separate workspace.
 - Do not resume historical Lab 2 feature proposals without a new request.
+
+## [2026-09-27 18:11:45] - Pi closeout synchronization
+**AI Assistant**: OpenAI Codex
+
+- Student authorized preserving the Pi's ambient experiment and synchronizing the
+  final submission without adding features or installing Lab 3 dependencies.
+- Created backup and archive branches retaining commit `09d2f43`, a complete Git
+  bundle, and a Lab 2 file snapshot; copied both backups to Windows and verified
+  matching SHA-256 checksums. The bundle passed Git verification.
+- Fetched GitHub and created a clean `Fall2026` tracking branch from the submitted
+  version, preserving the old branch and rejecting ignored-file overwrites.
+- Verified Lab 3 starter files and active display service. Updated the closeout
+  documents and Lab 3 handoff. No hardware settings or dependencies were changed.
+- Earlier blank-screen cause remains undiagnosed. No new visual/audio acceptance
+  tests or student learning outcomes are claimed.

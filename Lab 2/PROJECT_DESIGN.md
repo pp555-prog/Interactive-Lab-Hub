@@ -47,7 +47,7 @@ Encoder controls, servo motion, alternate views, IMU, capacitive touch, micropho
 interaction, and astronomical calculations are proposals, not delivered features
 or tasks for the next workspace.
 
-The separate Windows ambient-light experiment is preserved outside the published
+The separate Pi and Windows ambient-light experiment is preserved outside the published
 implementation. Its sensor-absent fallback was historically exercised, but physical
 sensor response was not established. It must not be described as validated smooth
 TFT dimming: the current digital backlight path applies an on/off threshold.
