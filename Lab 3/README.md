@@ -174,33 +174,45 @@ The reusable [phone-number script](speech-scripts/ask_phone.sh) saves a uniquely
 
 ## C. Turn-taking: knowing when someone has stopped talking
 
-Everything so far has worked on fixed audio files. A real conversational device does not get told when to start and stop recording — it has to decide. This is the problem that makes speech interfaces hard, and it is mostly not a speech recognition problem.
+I tested `listen.py` and `echo_bot.py` with `tiny.en` at silence thresholds of **0.2, 0.7, and 1.5 seconds**. I used “I would like a cup of tea” as a fluent sentence and then repeated it with a brief thinking pause after “I would like.” For the listener tests, I waited approximately three seconds between the two sentences. The pauses were performed naturally, not precisely measured.
 
-We use a **voice activity detector** (VAD) to segment the microphone stream into utterances. `listen.py` runs Silero VAD continuously and hands each detected utterance to faster-whisper:
+### Listening and segmentation
 
-```
-(.venv) $ cd speech-scripts
-(.venv) $ python listen.py
-```
+The first 0.2-second attempt had only a text readiness cue, so I was unsure when to speak. I excluded it and repeated the test with an audible “Speak now” cue after the listener was ready. The listener also picked up a fragment of that cue in the 0.2- and 0.7-second runs; those cue fragments are excluded below.
 
-Speak, pause, and watch it transcribe. Now change the endpointing threshold — the amount of silence the system requires before it decides your turn is over:
+| Silence threshold | Fluent sentence transcript | Paused sentence transcript segments |
+|---|---|---|
+| 0.2 s | “I would like.” | “I would like.” |
+| 0.7 s | “I would like a couple of tea.” | “I would like.” |
+| 1.5 s | “I would like a cup of tea.” | “I would like.” followed by “See you.” |
 
-```
-(.venv) $ python listen.py --min-silence 0.2
-(.venv) $ python listen.py --min-silence 1.5
-```
+I confirmed that I finished both sentences in every run. In the last run I said “a cup of tea,” not “See you.” The 1.5-second listener captured the fluent sentence correctly, but the paused sentence was still split and its ending misrecognized. These transcripts show incomplete capture and recognition errors; they do not isolate silence detection as the sole cause. Since my pauses were not timed, these are observations from individual trials rather than a controlled benchmark.
 
-\*\***Try both extremes, and something in between. Describe what each one feels like to talk to. Note specifically: at 0.2s, what kinds of normal speech get cut off? At 1.5s, what does the delay make the system seem like?**\*\*
+### The complete loop: how the reply felt
 
-There is no correct value. A system that takes drink orders and a system that listens to someone think out loud want very different thresholds, and the right one depends on what your users are doing with their pauses.
+I then used the echo bot with the same paused phrase at each setting, waiting for its spoken “I'm listening” cue. It replied once per trial using Piper.
 
-### The complete loop
+| Silence threshold | What the bot repeated | My experience |
+|---|---|---|
+| 0.2 s | “You said: I would like.” | I felt interrupted. |
+| 0.7 s | “You said: I would like.” | I still felt interrupted. |
+| 1.5 s | “You said: I would like a cup of tea.” | The wait felt comfortable. A longer pause would feel uncomfortable. |
 
-`echo_bot.py` puts the pieces together: it listens, endpoints, transcribes, and speaks a reply through Piper. The dialogue policy is deliberately trivial — it repeats what you said — so that everything you notice is a property of the timing rather than the content.
+At 0.2 seconds, the normal thinking pause between “I would like” and my request was treated as the end of my turn, and the bot answered without the rest of the sentence. At 0.7 seconds, I had the same experience. At 1.5 seconds, the echo bot allowed enough time for me to finish and repeated the whole sentence. This run felt patient enough to let me speak without making the wait uncomfortable. My comment about a longer wait is a preference, not a result from testing a threshold above 1.5 seconds.
 
-```
-(.venv) $ python echo_bot.py
-```
+For this interaction, I preferred **1.5 seconds**. The listener and echo-bot trials did not give identical results at that setting, so it is not a guarantee that every pause will be handled correctly. I would use it as a starting point and retest with the dialogue and users of the final device.
+
+### Processing times
+
+| Echo-bot threshold | Speech recognition | TTS first audio | Reported processing gap |
+|---|---:|---:|---:|
+| 0.2 s | 0.89 s | 0.26 s | 1.15 s |
+| 0.7 s | 0.86 s | 0.22 s | 1.08 s |
+| 1.5 s | 1.05 s | 0.37 s | 1.42 s |
+
+The script labels the final column “total gap,” but calculates it as recognition time plus time to generate the first speech audio after it has detected the end of a turn. It excludes the silence threshold and does not directly measure the full delay from my last spoken word to audible playback. I therefore keep these processing times separate from my experience of the overall wait.
+
+**AI assistance:** Codex operated the tests and helped organize the observed transcripts and timings into this report. I performed the spoken trials, confirmed what I said, and supplied the interruption and comfort judgments.
 
 ## D. Storyboard
 
