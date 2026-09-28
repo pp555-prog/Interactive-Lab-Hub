@@ -1,0 +1,10 @@
+
+Hello, my name is Pablo and today I'm testing speech recognition.
+
+model            base.en (int8, beam=1)
+audio duration   10.00s
+model load       0.64s
+transcription    2.07s
+real-time factor 0.21x
+
+(Model load is a one-time cost per process. In an interactive system you load once and keep the model resident  which is what listen.py does.)

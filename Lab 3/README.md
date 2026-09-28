@@ -141,6 +141,31 @@ Available sizes, smallest first: `tiny.en`, `base.en`, `small.en`, `medium.en`. 
 
 \*\***Write your own script that verbally asks for a numerical input (a phone number, zipcode, number of pets) and records the answer the respondent provides.**\*\* Numbers are a good stress test — transcription systems make characteristic errors on digit strings, and you will want to know what they are before you design around them.
 
+### My speech recognition comparison
+
+I recorded a 10-second clip, `comparison-05.wav`, after finding that five seconds was too short for my sentence. I confirmed that the selected recording captured my sentence and that both transcripts matched what I said:
+
+> Hello, my name is Pablo and today I'm testing speech recognition.
+
+Both runs used the same recording, CPU inference, int8 computation, and beam size 1. Models were downloaded before testing.
+
+| Model | Audio duration | Model load | Transcription time | Real-time factor |
+|---|---:|---:|---:|---:|
+| tiny.en | 10.00 s | 0.53 s | 1.34 s | 0.13× |
+| base.en | 10.00 s | 0.64 s | 2.07 s | 0.21× |
+
+Real-time factor is transcription time divided by recording duration; the table uses the course script's rounded measurements. Model loading is reported separately. These factors include the silence in the 10-second recording and are not measurements of end-to-end conversational response time.
+
+For this sentence, base.en took 0.73 seconds longer without improving the transcript. I would choose tiny.en for this test because it gave the same accuracy with less delay. This single example does not establish that the larger model is never useful. Raw outputs: [tiny.en](results/comparison-05-tiny.txt) and [base.en](results/comparison-05-base.txt).
+
+### Asking for a numerical input
+
+My [numerical-input script](speech-scripts/ask_pets.sh) uses Piper to ask “How many pets do you have?”, waits for playback to finish, records five seconds from the webcam microphone, and transcribes the saved WAV using tiny.en. Run `./speech-scripts/ask_pets.sh` from the Lab 3 directory. Recordings receive unique filenames; `LAB3_MIC_DEVICE` can override the webcam's ALSA device if needed.
+
+I said **“I have one pet.”** The actual transcript was **“I have one tip.”** The number “one” was recognized correctly, but “pet” was substituted with “tip.” The script displays the uncorrected transcript. For this five-second response, model loading took 0.53 seconds and transcription took 0.91 seconds, giving a real-time factor of 0.18×. This test demonstrates a word-recognition error, not a numerical error.
+
+Codex assisted with the scripts, timing runs, and documentation. I supplied the spoken responses and confirmed the transcript accuracy and the recognition error. Audio recordings remain on the Pi; raw comparison timing outputs are included in the repository.
+
 ## C. Turn-taking: knowing when someone has stopped talking
 
 Everything so far has worked on fixed audio files. A real conversational device does not get told when to start and stop recording — it has to decide. This is the problem that makes speech interfaces hard, and it is mostly not a speech recognition problem.
