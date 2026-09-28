@@ -1,6 +1,6 @@
 # Chatterboxes
 
-**NAMES OF COLLABORATORS HERE**
+**Author:** Pablo Penalba. **AI assistance:** Codex assisted with setup, scripts, and documentation; listening observations and voice selection are mine.
 
 [![Watch the video](https://user-images.githubusercontent.com/1128669/135009222-111fe522-e6ba-46ad-b6dc-d1633d21129c.png)](https://youtu.be/LZ0VJClIlRI?si=Yy84mcyVYuVV19mn)
 
@@ -110,6 +110,14 @@ The demo script also shows `--output-raw`, which streams audio to the speaker as
 (This shell file should be saved to your own repo for this lab.)
 
 \*\***Then answer: Is the same greeting, in these different voices, the same greeting? Describe one concrete way the voice changed what the utterance seemed to mean or who seemed to be speaking.**\*\*
+
+### My greeting and voice comparison
+
+I chose Piper (`en_US-lessac-medium`) for my [personalized greeting script](speech-scripts/greet_pablo.sh). It says: “Hello, Pablo. Welcome back. What would you like to work on today?” Run `./speech-scripts/greet_pablo.sh` from the Lab 3 directory.
+
+The words were the same, but the greeting felt different depending on the voice. eSpeak sounded robotic, making it feel like a machine was addressing me. Festival sounded more human-like, although still robotic. Piper sounded best to me, so I chose it for my greeting.
+
+I first listened to “Hello, Pablo,” but two words were too short to judge the voices well, so I compared all three with the longer greeting above. See [setup and listening notes](PART1A.md).
 
 ## B. Speech to Text
 
