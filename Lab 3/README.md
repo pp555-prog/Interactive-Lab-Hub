@@ -166,6 +166,12 @@ I said **“I have one pet.”** The actual transcript was **“I have one tip.�
 
 Codex assisted with the scripts, timing runs, and documentation. I supplied the spoken responses and confirmed the transcript accuracy and the recognition error. Audio recordings remain on the Pi; raw comparison timing outputs are included in the repository.
 
+### Larger-number follow-up: phone number
+
+I repeated the numerical-input exercise with a nine-digit phone number. Piper asked “What is your phone number?”, then the Pi recorded for 10 seconds and transcribed with tiny.en. I confirmed that all nine digits were correct. Model loading took 0.54 seconds, transcription took 1.01 seconds, and the real-time factor was 0.10×. The actual digits and audio are private and are not included in this report.
+
+The reusable [phone-number script](speech-scripts/ask_phone.sh) saves a uniquely named recording, waits until the question finishes before recording, and displays the uncorrected transcript. Run `./speech-scripts/ask_phone.sh`. The successful result above came from the equivalent question/record/transcribe command sequence before it was saved as a reusable script. The saved script was syntax-checked; a separate live run has not yet been performed.
+
 ## C. Turn-taking: knowing when someone has stopped talking
 
 Everything so far has worked on fixed audio files. A real conversational device does not get told when to start and stop recording — it has to decide. This is the problem that makes speech interfaces hard, and it is mostly not a speech recognition problem.
