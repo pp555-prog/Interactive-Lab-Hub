@@ -227,6 +227,9 @@ Write out what you imagine the dialogue to be. Use cards, post-its, or whatever 
 
 \*\***Please describe and document your process.**\*\*
 
+I chose a camera assistant that lets someone ask about entrance activity while working at a desk, without turning around or opening a dashboard. I developed the storyboard around checking recent activity, asking a follow-up question, and recovering when the user asks something the device cannot answer, such as identifying a person.
+The interaction starts with pressing Enter and hearing “I’m listening,” so the user knows when to speak. I chose 1.5 seconds of silence as the initial turn-ending threshold because that setting felt comfortable in my Part C echo-bot trial. It still needs testing with this dialogue. The Verplank diagram connects the user’s actions, the spoken and visual feedback, and their understanding of the interaction sequence.
+
 Your script should include the pauses. Where does your device wait, and for how long? You now know from Part C that this is a parameter you have to choose, not something that happens for free.
 
 ## E. Acting out the dialogue
