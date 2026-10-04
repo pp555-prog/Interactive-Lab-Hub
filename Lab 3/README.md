@@ -263,6 +263,8 @@ The system should:
 
 *Include videos or screencaptures of both the system and the controller.*
 
+https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos/Lab%203?d=w6f3a8c3fc42b4b46b473db28230b7c37&csf=1&web=1&e=EchU58
+
 ## Test the system
 
 Try to get at least two people to interact with your system. (Ideally, you would inform them that there is a wizard *after* the interaction, but we recognize that can be hard.)
