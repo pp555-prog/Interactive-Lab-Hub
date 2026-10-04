@@ -126,7 +126,7 @@ Part 1E feedback is documented above. I also saved the detector video and record
 **Recordings:** [Lab 3 videos — prototype demo and detector recording](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos/Lab%203?d=w6f3a8c3fc42b4b46b473db28230b7c37&csf=1&web=1&e=EchU58).
 
 <img width="650" height="427" alt="image" src="https://github.com/user-attachments/assets/a298c88e-adc8-4673-b1d7-563fad609955" />
-<img width="623" height="412" alt="image" src="https://github.com/user-attachments/assets/2ca9d9f0-30a6-4548-a582-3e23c27456a2" />
+<img width="644" height="426" alt="image" src="https://github.com/user-attachments/assets/6c6741eb-6e77-4607-b103-f38f32eaba66" />
 
 **AI assistance:** I designed and engineered the prototype and directed its implementation, hardware integration, and revisions, including the button, listening LED, and enlarged state display. I performed the physical trials and evaluated the screen states and spoken replies. Codex assisted with coding, deployment, test commands, wizard-controller operation during my checks, and documentation under my direction. The prototype used human approval rather than autonomous replies.
 
