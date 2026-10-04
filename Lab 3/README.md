@@ -99,8 +99,13 @@ The script labels the final column “total gap,” but calculates it as recogni
 
 ## D. Storyboard
 
-<img width="672" height="413" alt="image" src="https://github.com/user-attachments/assets/86d6cabd-876c-4c03-af6f-05f4a9ab5d06" />
-<img width="668" height="391" alt="image" src="https://github.com/user-attachments/assets/4ca8f07e-5d51-4690-8586-884c050fac8b" />
+### Original storyboard
+
+<img width="672" height="413" alt="Original Camera Assistant storyboard" src="https://github.com/user-attachments/assets/86d6cabd-876c-4c03-af6f-05f4a9ab5d06" />
+
+### Original Verplank diagram
+
+<img width="668" height="391" alt="Original Camera Assistant Verplank diagram" src="https://github.com/user-attachments/assets/4ca8f07e-5d51-4690-8586-884c050fac8b" />
 
 I chose a camera assistant that lets someone ask about entrance activity while working at a desk, without turning around or opening a dashboard. I developed the storyboard around checking recent activity, asking a follow-up question, and recovering when the user asks something the device cannot answer, such as identifying a person.
 The interaction starts with pressing Enter and hearing “I’m listening,” so the user knows when to speak. I chose 1.5 seconds of silence as the initial turn-ending threshold because that setting felt comfortable in my Part C echo-bot trial. It still needs testing with this dialogue. The Verplank diagram connects the user’s actions, the spoken and visual feedback, and their understanding of the interaction sequence.
@@ -125,9 +130,6 @@ Part 1E feedback is documented above. I also saved the detector video and record
 
 **Recordings:** [Lab 3 videos — prototype demo and detector recording](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos/Lab%203?d=w6f3a8c3fc42b4b46b473db28230b7c37&csf=1&web=1&e=EchU58).
 
-<img width="650" height="427" alt="image" src="https://github.com/user-attachments/assets/a298c88e-adc8-4673-b1d7-563fad609955" />
-<img width="644" height="426" alt="image" src="https://github.com/user-attachments/assets/6c6741eb-6e77-4607-b103-f38f32eaba66" />
-
 **AI assistance:** I designed and engineered the prototype and directed its implementation, hardware integration, and revisions, including the button, listening LED, and enlarged state display. I performed the physical trials and evaluated the screen states and spoken replies. Codex assisted with coding, deployment, test commands, wizard-controller operation during my checks, and documentation under my direction. The prototype used human approval rather than autonomous replies.
 
 
@@ -135,12 +137,20 @@ Part 1E feedback is documented above. I also saved the detector video and record
 
 The acting-out exercise showed that speech alone made the interaction confusing. The revised prototype replaces the original Enter-key trigger with the physical green button and adds a listening LED and large screen states. The screen originally included a title; I removed it and enlarged the state text to make it easier to read. The 1.5-second silence threshold remains the starting point from Part C. Participant feedback identifies response latency as the next improvement to address.
 
+### Revised storyboard
+
+<img width="650" height="427" alt="Revised Camera Assistant storyboard with button, state display, and wizard approval" src="https://github.com/user-attachments/assets/a298c88e-adc8-4673-b1d7-563fad609955" />
+
+### Revised Verplank diagram
+
+<img width="644" height="426" alt="Revised Camera Assistant DO FEEL KNOW diagram with recovery responses" src="https://github.com/user-attachments/assets/6c6741eb-6e77-4607-b103-f38f32eaba66" />
+
 ### Revised dialogue and state sequence
 
 | Stage | User or device action | Feedback and waiting behavior |
 |---|---|---|
 | IDLE | User presses the green button. | The screen shows IDLE until the turn starts. |
-| Listening cue | Device says “I'm listening.” | The cue finishes before microphone capture begins. |
+| PREPARING | Device says “I'm listening.” | The screen shows PREPARING; the cue finishes before microphone capture begins. |
 | LISTENING | User asks “Is anyone at the entrance?” | The LED is on and the screen shows LISTENING. After 1.5 seconds of silence, capture ends. |
 | THINKING | The request is transcribed; the wizard reviews it with fresh camera evidence. | The screen shows THINKING during processing and approval. Extra button presses do not start another turn. |
 | SPEAKING | The wizard approves “The camera currently detects one person.” when the live count is one. | The screen shows SPEAKING while Piper plays the answer. |
