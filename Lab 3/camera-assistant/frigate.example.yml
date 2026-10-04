@@ -1,0 +1,33 @@
+# Copy to runtime/frigate/config.yml on the Pi. Runtime files stay private.
+mqtt:
+  host: mqtt
+  stats_interval: 15
+detectors:
+  cpu1:
+    type: cpu
+    num_threads: 2
+record:
+  enabled: false
+snapshots:
+  enabled: false
+go2rtc:
+  streams:
+    entrance:
+      - 'ffmpeg:device?video=0&video_size=640x480#video=h264'
+cameras:
+  entrance:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/entrance
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    detect:
+      enabled: false # Verify feed first, then enable for the detection trial.
+      width: 640
+      height: 480
+      fps: 5
+    objects:
+      track:
+        - person

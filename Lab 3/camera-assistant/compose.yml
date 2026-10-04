@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  mqtt:
+    image: eclipse-mosquitto:2
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:1883:1883'
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+  frigate:
+    # Pinned official base with a single headless OpenCV package.
+    image: camera-assistant-frigate:opencv-clean
+    build: .
+    restart: unless-stopped
+    shm_size: '128mb'
+    depends_on:
+      - mqtt
+    devices:
+      - /dev/video0:/dev/video0
+    volumes:
+      - ./runtime/frigate:/config
+      - /etc/localtime:/etc/localtime:ro
+    tmpfs:
+      - /tmp/cache:size=128m
+    ports:
+      - '127.0.0.1:5000:5000'
+      - '127.0.0.1:8971:8971'
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '2'

@@ -1,0 +1,5 @@
+sparkfun-qwiic-button>=2,<3
+adafruit-circuitpython-rgb-display>=3,<4
+adafruit-blinka>=8,<9
+lgpio==0.2.2.0; sys_platform == "linux"
+Pillow>=10,<13

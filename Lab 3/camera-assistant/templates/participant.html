@@ -1,0 +1,4 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camera Assistant</title><style>body{margin:0;background:#10232d;color:#fff;font:24px system-ui;display:grid;place-content:center;min-height:100vh;text-align:center}h1{font-size:28px}#state{font-size:48px;color:#83e6b4}p{color:#b6cad4}</style>
+<h1>Camera Assistant</h1><div id="state">IDLE</div><p>Press the green button to ask a question.</p>
+<script>setInterval(async()=>{try{const r=await fetch('/api/status');if(!r.ok)throw Error();document.getElementById('state').textContent=(await r.json()).state}catch{document.getElementById('state').textContent='UNAVAILABLE'}},300)</script></html>

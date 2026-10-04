@@ -1,115 +1,18 @@
 # Chatterboxes
 
-**Author:** Pablo Penalba. **AI assistance:** Codex assisted with setup, scripts, and documentation; listening observations and voice selection are mine.
+**Author:** Pablo Penalba.
 
-[![Watch the video](https://user-images.githubusercontent.com/1128669/135009222-111fe522-e6ba-46ad-b6dc-d1633d21129c.png)](https://youtu.be/LZ0VJClIlRI?si=Yy84mcyVYuVV19mn)
+I built a speech-enabled Camera Assistant for checking entrance activity using real person detections and human-approved spoken replies.
 
-In this lab, we want you to design interaction with a speech-enabled device — something that listens and talks to you. This device can do anything *but* control lights (since we already did that in Lab 1). First, we want you to storyboard what you imagine the conversational interaction to be like. Then you will use wizarding techniques to elicit examples of what people might say, ask, or respond. We then want you to use the examples collected from at least two other people to inform the redesign of the device.
-
-We will focus on **audio** as the main modality for interaction to start; these general techniques can be extended to **video**, **haptics** or other interactive mechanisms in the second part of the Lab.
-
-A note on what you are building with. Speech interfaces are usually taught as two boxes — speech-in, speech-out — and that framing hides the part that actually determines whether an interaction works. Between listening and speaking sits the question of **whose turn it is**: when does the device decide you have finished talking, and how long does it make you wait before it answers? This lab gives you direct control over both, and we will ask you to notice what changes when you move them.
-
-## Prep for Part 1: Get the Latest Content and Pick up Additional Parts
-
-Please check instructions in [prep.md](prep.md) and complete the setup.
-
-### Pick up Web Camera If You Don't Have One
-
-Students who have not already received a web camera will receive their Webcam and at the beginning of lab. If you cannot make it to class this week, please contact the TAs to ensure you get these.
-
-### Get the Latest Content
-
-As always, pull updates from the class Interactive-Lab-Hub to both your Pi and your own GitHub repo.
-
-**\[recommended\]** Option 1: On the Pi, `cd` to your `Interactive-Lab-Hub`, pull the updates from upstream (class lab-hub) and push the updates back to your own GitHub repo. You will need the *personal access token* for this.
-
-```
-pi@ixe00:~$ cd Interactive-Lab-Hub
-pi@ixe00:~/Interactive-Lab-Hub $ git pull upstream Fall2026
-pi@ixe00:~/Interactive-Lab-Hub $ git add .
-pi@ixe00:~/Interactive-Lab-Hub $ git commit -m "get lab3 updates"
-pi@ixe00:~/Interactive-Lab-Hub $ git push
-```
-
-Option 2: On your own GitHub repo, create a pull request to get updates from the class Interactive-Lab-Hub. After you have the latest updates online, go to your Pi, `cd` to your `Interactive-Lab-Hub` and use `git pull`.
-
----
+**AI assistance:** Codex assisted with setup, scripts, implementation, tests, and documentation. I supplied the spoken trials, physical observations, voice preferences, and participant feedback. Details are noted in the relevant sections.
 
 # Part 1
 
 ## Setup
 
-Create and activate a virtual environment for this lab:
-
-```
-pi@ixe00:~$ cd Interactive-Lab-Hub/Lab\ 3
-pi@ixe00:~/Interactive-Lab-Hub/Lab 3 $ python3 -m venv .venv
-pi@ixe00:~/Interactive-Lab-Hub/Lab 3 $ source .venv/bin/activate
-(.venv) pi@ixe00:~/Interactive-Lab-Hub/Lab 3 $
-```
-
-Install the Python dependencies:
-
-```
-(.venv) $ pip install -r requirements.txt
-```
-
-This takes a few minutes. If you would like it to take considerably less time, [`uv`](https://docs.astral.sh/uv/) is a drop-in replacement for `pip` that is dramatically faster on the Pi:
-
-```
-(.venv) $ pip install uv && uv pip install -r requirements.txt
-```
-
-Then run the setup script, which installs the classic speech synthesizers, downloads the voice activity detection model, and pre-fetches a neural voice and a speech recognition model so you are not waiting on downloads during lab:
-
-```
-(.venv):~$ cd speech-scripts
-(.venv) $ ./setup.sh
-```
-
-Check your audio devices before going further. `arecord -l` lists capture devices and `aplay -l` lists playback devices; if your webcam microphone or Bluetooth speaker does not appear, fix that first — every script below assumes the system defaults are the ones you want.
+I used a Raspberry Pi 5 with USB audio, a Lab 3 Python virtual environment, and the course speech scripts. Piper, Whisper, and Silero models were installed before the trials. I checked microphone capture and speaker playback before testing.
 
 ## A. Text to Speech
-
-Your Pi can speak in several quite different ways, and the differences are audible in a way that matters for design. In `speech-scripts/` there are shell scripts for each.
-
-### The classic engines
-
-```
-(.venv) $ cd speech-scripts
-
-(.venv) $ sudo apt update
-(.venv) $ sudo apt install -y espeak festival festvox-kallpc16k
-
-(.venv) $ ./espeak_demo.sh
-(.venv) $ ./festival_demo.sh
-```
-
-You can run these `.sh` files by typing `./filename`, and read one with `cat filename`. You can also play audio files directly with `aplay filename` — try `aplay lookdave.wav`.
-
-These are all decades-old technology and they sound like it. `espeak-ng` is a *formant synthesizer*: it generates speech from an acoustic model of the vocal tract, which is why it sounds robotic but also why the whole thing fits in a couple of megabytes and responds instantly. `festival` is *concatenative*: they stitch together recorded fragments of a real speaker, which sounds more human but breaks audibly at the seams.
-
-### Neural TTS with Piper
-
-Note that the Piper command line changed in version 1.x — voices are now downloaded explicitly with `python3 -m piper.download_voices`, and you invoke it as `python3 -m piper`. Tutorials you find online may show the old `echo ... | piper --model ...` form, which no longer works. Browse the [voice samples](https://rhasspy.github.io/piper-samples) and download a different one if you'd like:
-
-```
-(.venv) $ python3 -m piper.download_voices en_US-lessac-medium
-```
-
-[Piper](https://github.com/OHF-Voice/piper1-gpl) synthesizes speech with a small neural network, runs comfortably on the Pi 5, and sounds markedly better than the above.
-
-```
-(.venv) $ ./piper_demo.sh
-```
-
-The demo script also shows `--output-raw`, which streams audio to the speaker as it is generated rather than writing a file first. Listen for the difference in how quickly speech begins. In a conversational system this gap is the thing your user experiences as responsiveness.
-
-\*\***Write your own shell file to use your favorite of these TTS engines to have your Pi greet you by name.**\*\*
-(This shell file should be saved to your own repo for this lab.)
-
-\*\***Then answer: Is the same greeting, in these different voices, the same greeting? Describe one concrete way the voice changed what the utterance seemed to mean or who seemed to be speaking.**\*\*
 
 ### My greeting and voice comparison
 
@@ -120,26 +23,6 @@ The words were the same, but the greeting felt different depending on the voice.
 I first listened to “Hello, Pablo,” but two words were too short to judge the voices well, so I compared all three with the longer greeting above. See [setup and listening notes](PART1A.md).
 
 ## B. Speech to Text
-
-We use [faster-whisper](https://github.com/SYSTRAN/faster-whisper), a reimplementation of OpenAI's Whisper model that runs several times faster on CPU and does not require PyTorch. All processing happens on the Pi; nothing is sent to a server.
-
-```
-(.venv) $ python transcribe.py lookdave.wav
-```
-
-The transcript is not the interesting output here — the timings are. Run it again with a larger model and compare:
-
-```
-(.venv) $ python transcribe.py lookdave.wav --model base.en
-(.venv) $ python transcribe.py lookdave.wav --model small.en
-#  noted that the first run may take longer because the model is downloaded, and that the HF unauthenticated-request warning is expected and not an error.
-```
-
-Available sizes, smallest first: `tiny.en`, `base.en`, `small.en`, `medium.en`. The `.en` variants are English-only and faster than their multilingual counterparts at the same size.
-
-\*\***Record a few seconds of your own speech (`arecord -d 5 -f cd -c 1 -r 16000 test.wav`) and transcribe it with at least two model sizes. Report the real-time factor for each. At what point does the accuracy improvement stop being worth the delay, for a system that has to answer you?**\*\*
-
-\*\***Write your own script that verbally asks for a numerical input (a phone number, zipcode, number of pets) and records the answer the respondent provides.**\*\* Numbers are a good stress test — transcription systems make characteristic errors on digit strings, and you will want to know what they are before you design around them.
 
 ### My speech recognition comparison
 
@@ -216,71 +99,62 @@ The script labels the final column “total gap,” but calculates it as recogni
 
 ## D. Storyboard
 
-Storyboard and/or use a Verplank diagram to design a speech-enabled device. (Stuck? Make a device that talks for dogs. If that is too stupid, find an application that is better than that.)
+<img width="672" height="413" alt="image" src="https://github.com/user-attachments/assets/86d6cabd-876c-4c03-af6f-05f4a9ab5d06" />
+<img width="668" height="391" alt="image" src="https://github.com/user-attachments/assets/4ca8f07e-5d51-4690-8586-884c050fac8b" />
 
-\*\***Post your storyboard and diagram here.**\*\*
-
-Write out what you imagine the dialogue to be. Use cards, post-its, or whatever method helps you develop alternatives or group responses.
-
-\*\***Please describe and document your process.**\*\*
-
-Your script should include the pauses. Where does your device wait, and for how long? You now know from Part C that this is a parameter you have to choose, not something that happens for free.
+I chose a camera assistant that lets someone ask about entrance activity while working at a desk, without turning around or opening a dashboard. I developed the storyboard around checking recent activity, asking a follow-up question, and recovering when the user asks something the device cannot answer, such as identifying a person.
+The interaction starts with pressing Enter and hearing “I’m listening,” so the user knows when to speak. I chose 1.5 seconds of silence as the initial turn-ending threshold because that setting felt comfortable in my Part C echo-bot trial. It still needs testing with this dialogue. The Verplank diagram connects the user’s actions, the spoken and visual feedback, and their understanding of the interaction sequence.
 
 ## E. Acting out the dialogue
 
-Find a partner, and *without sharing the script with your partner* try out the dialogue you've designed, where you (as the device designer) act as the device you are designing. Please record this interaction (for example, using Zoom's record feature).
-
-\*\***Describe if the dialogue seemed different than what you imagined when it was acted out, and how.**\*\*
-
+When we acted out the dialogue, it felt more confusing for the other person than I had imagined because there were no visual cues. Speech alone did not clearly show when the device was listening or thinking, making it harder to tell when to speak and when to wait. This showed me why the interaction needs visible feedback, such as an LED for listening and a screen showing the current state.
 
 ---
 
 # Lab 3 Part 2
 
-For Part 2, you will redesign the interaction with the speech-enabled device using the data collected, as well as feedback from part 1.
+## Prototype and recordings
 
-## Prep for Part 2
+The working prototype and wizard controller are in [camera-assistant/](camera-assistant/README.md). On October 4, I confirmed one combined trial: pressing the green button started the listening cue, my entrance question was recognized exactly, Frigate detected one person, and the human wizard approved the correct spoken reply. The small screen showed readable LISTENING, THINKING, SPEAKING, and IDLE states. Two additional button presses during THINKING did not start another turn. A three-second hold was not verified; I chose to stop additional button checks and move on to recording and documentation.
 
-1. What are concrete things that could use improvement in the design of your device? For example: wording, timing, anticipation of misunderstandings.
-2. What are other modes of interaction *beyond speech* that you might also use to clarify how to interact? In particular: how does someone know when the device is listening, and when it is thinking? You have a screen and an LED.
-3. Make a new storyboard, diagram and/or script based on these reflections.
-4. (optional) Integrate [input devices](inputs.md) in the system
+The prototype runs on a Raspberry Pi 5. The webcam and mini USB microphone are its sensors; the green button starts a turn, its LED indicates listening, and a USB speaker and Mini PiTFT provide feedback. Frigate supplies actual person detections through MQTT. Silero detects speech boundaries with a 1.5-second silence threshold, Whisper transcribes the request, and Piper speaks the wizard-approved answer. The screen shows only the state in large centered letters. Missing camera counts produce an explicit waiting response rather than an assumed zero.
 
-## Prototype your system
+In the confirmed combined example, speech recognition took 1.36 seconds. The measured software interval from detected speech endpoint to playback request was 11.96 seconds, including 9.92 seconds waiting for human approval and tool interaction. These are single-trial software timings, not measured acoustic latency. Other trials included recognition errors and a manual correction. A zero-person answer after I left the camera view matched the received count.
 
-The system should:
-* use the Raspberry Pi
-* use one or more sensors
-* require participants to speak to it
+Part 1E feedback is documented above. I also saved the detector video and recorded an earlier prototype demo. Participant feedback is summarized below. The hardware checks described here were my own prototype trials, separate from that feedback. See the [recording and evaluation procedure](camera-assistant/EVALUATION.md).
 
-*Document how the system works.*
+**Recordings:** [Lab 3 videos — prototype demo and detector recording](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos/Lab%203?d=w6f3a8c3fc42b4b46b473db28230b7c37&csf=1&web=1&e=EchU58).
 
-*Include videos or screencaptures of both the system and the controller.*
+**AI assistance:** Codex implemented and deployed the prototype, operated the wizard approvals during these checks, and helped document the evidence. I performed the physical trials and confirmed the observed screen states and spoken replies.
 
-## Test the system
 
-Try to get at least two people to interact with your system. (Ideally, you would inform them that there is a wizard *after* the interaction, but we recognize that can be hard.)
+## Interaction redesign
 
-Answer the following:
+The acting-out exercise showed that speech alone made the interaction confusing. The revised prototype replaces the original Enter-key trigger with the physical green button and adds a listening LED and large screen states. The screen originally included a title; I removed it and enlarged the state text to make it easier to read. The 1.5-second silence threshold remains the starting point from Part C. Participant feedback identifies response latency as the next improvement to address.
+
+### Revised dialogue and state sequence
+
+| Stage | User or device action | Feedback and waiting behavior |
+|---|---|---|
+| IDLE | User presses the green button. | The screen shows IDLE until the turn starts. |
+| Listening cue | Device says “I'm listening.” | The cue finishes before microphone capture begins. |
+| LISTENING | User asks “Is anyone at the entrance?” | The LED is on and the screen shows LISTENING. After 1.5 seconds of silence, capture ends. |
+| THINKING | The request is transcribed; the wizard reviews it with fresh camera evidence. | The screen shows THINKING during processing and approval. Extra button presses do not start another turn. |
+| SPEAKING | The wizard approves “The camera currently detects one person.” when the live count is one. | The screen shows SPEAKING while Piper plays the answer. |
+| IDLE | The reply finishes. | The device returns to IDLE and accepts a new turn. |
+
+For a fresh zero count, the reply says that no person is currently detected. If a count is unavailable, the reply explains that it is waiting for camera information. Unsupported questions, such as asking who a person is, require an explanation of the system's limits. The wizard can correct a misrecognized request before approving a reply. If no speech begins within ten seconds, capture times out; if the wizard does not approve within sixty seconds, the interaction returns to idle. These bounds prevent an indefinite wait, but they do not solve the response latency reported by participants.
+
+## Evaluation
 
 ### What worked well about the system and what didn't?
-\*\**your answer here*\*\*
+The people who tried the prototype said it worked well, but the latency was too high. This suggests that the basic interaction was useful, while the wait for an answer made it less practical. In my own checks, the button, listening cue, LED, and readable screen states provided clear feedback, and the system could answer from real camera detections. Speech recognition sometimes made mistakes, requiring a human correction. The participant feedback is qualitative; I did not collect separate timing measurements for each person.
 
 ### What worked well about the controller and what didn't?
-\*\**your answer here*\*\*
+The controller let the wizard review the recognized request and camera evidence, correct recognition errors, and approve a factual reply. That flexibility helped recover from mistakes without inventing camera observations. The main limitation was the extra time needed for a human to review and approve the answer. Tool permission prompts also interrupted earlier demo attempts. In my confirmed combined trial, 9.92 seconds of the 11.96-second endpoint-to-playback-request interval were spent waiting for wizard approval and tool interaction, so processing speed alone would not remove most of that example's delay.
 
 ### What lessons can you take away from the WoZ interactions for designing a more autonomous version of the system?
-\*\**your answer here*\*\*
+The feedback pointed toward a more powerful device and full automation as possible improvements. Faster hardware could reduce speech-recognition and camera-processing time, while automation could remove the manual approval wait. These improvements have not been tested. An autonomous version would need to handle the corrections and decisions the wizard currently makes: recognize supported questions, ask for clarification when recognition is uncertain, use fresh camera evidence, and explain when information is unavailable. I would keep the listening cue, LED, and screen states so users can follow the interaction while waiting.
 
 ### How could you use your system to create a dataset of interaction? What other sensing modalities would make sense to capture?
-\*\**your answer here*\*\*
-
-<details>
-  <summary><strong>Submission Cleanup Reminder (Click to Expand)</strong></summary>
-
-  **Before submitting your README.md:**
-  - This readme.md file has a lot of extra text for guidance.
-  - Remove all instructional text and example prompts from this file.
-  - You may either delete these sections or use the toggle/hide feature in VS Code to collapse them for a cleaner look.
-  - Your final submission should be neat, focused on your own work, and easy to read for grading.
-</details>
+With participant agreement, I could log each request, its recognized transcript, the camera count and availability, the wizard's correction or approved reply, and the interaction timestamps. These records could help identify common recognition errors, unsupported requests, and sources of delay. Button events and screen-state transitions would provide useful context about turn-taking. Consented audio could help evaluate recognition, and synchronized camera clips could help compare detections with the actual scene. A distance or motion sensor could provide an additional presence signal. These are proposed dataset extensions; I have not collected such a participant dataset.
