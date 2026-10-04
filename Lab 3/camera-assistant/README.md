@@ -220,8 +220,12 @@ Sources: [Frigate webcam setup](https://docs.frigate.video/configuration/camera_
 [CPU detector limitations](https://docs.frigate.video/configuration/object_detectors/#cpu-detector-not-recommended),
 [SparkFun button library](https://github.com/sparkfun/Qwiic_Button_Py).
 
-AI assistance: Codex implemented the software and setup documentation. Hardware
-results and participant findings must be supplied by observed trials.
+Design and engineering: Pablo designed the system, made engineering decisions,
+and directed its implementation, hardware integration, and interaction revisions.
+AI assistance: Codex assisted with code implementation, deployment, test commands,
+wizard-controller operation during Pablo's checks, and documentation under his
+direction. Hardware results and participant findings come from actual trials
+and Pablo's reported observations.
 
 
 

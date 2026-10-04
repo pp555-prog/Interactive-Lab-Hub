@@ -41,7 +41,8 @@ the temporary file when finished. It also works from another working directory.
 
 ## AI assistance
 
-Codex assisted with Pi setup, audio checks, running the speech comparisons,
-writing the greeting script, and organizing these notes. Voice assessments and
-the choice of Piper came from Pablo. No participant studies or later lab
-activities are claimed here.
+Pablo directed the setup and speech comparisons, assessed the voices, and chose
+Piper for his greeting. Under his direction, Codex assisted with Pi setup, audio
+checks, running comparison commands, implementing the greeting script, and
+organizing these notes. No participant studies or later lab activities are
+claimed here.

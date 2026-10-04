@@ -4,7 +4,7 @@
 
 I built a speech-enabled Camera Assistant for checking entrance activity using real person detections and human-approved spoken replies.
 
-**AI assistance:** Codex assisted with setup, scripts, implementation, tests, and documentation. I supplied the spoken trials, physical observations, voice preferences, and participant feedback. Details are noted in the relevant sections.
+**Design and engineering:** I designed the Camera Assistant, made the engineering decisions, and directed what to build and how to revise it. I created the storyboard and diagram, directed the hardware and interaction design, performed the physical trials, and gathered participant feedback. **AI assistance:** Under my direction, Codex assisted with setup, code implementation, deployment, test execution, and report drafting. Details are noted in the relevant sections.
 
 # Part 1
 
@@ -47,7 +47,7 @@ My [numerical-input script](speech-scripts/ask_pets.sh) uses Piper to ask “How
 
 I said **“I have one pet.”** The actual transcript was **“I have one tip.”** The number “one” was recognized correctly, but “pet” was substituted with “tip.” The script displays the uncorrected transcript. For this five-second response, model loading took 0.53 seconds and transcription took 0.91 seconds, giving a real-time factor of 0.18×. This test demonstrates a word-recognition error, not a numerical error.
 
-Codex assisted with the scripts, timing runs, and documentation. I supplied the spoken responses and confirmed the transcript accuracy and the recognition error. Audio recordings remain on the Pi; raw comparison timing outputs are included in the repository.
+I directed the speech tests, supplied the spoken responses, and assessed transcript accuracy and recognition errors. Codex assisted with script implementation, running timing commands, and documenting the results under my direction. Audio recordings remain on the Pi; raw comparison timing outputs are included in the repository.
 
 ### Larger-number follow-up: phone number
 
@@ -95,7 +95,7 @@ For this interaction, I preferred **1.5 seconds**. The listener and echo-bot tri
 
 The script labels the final column “total gap,” but calculates it as recognition time plus time to generate the first speech audio after it has detected the end of a turn. It excludes the silence threshold and does not directly measure the full delay from my last spoken word to audible playback. I therefore keep these processing times separate from my experience of the overall wait.
 
-**AI assistance:** Codex operated the tests and helped organize the observed transcripts and timings into this report. I performed the spoken trials, confirmed what I said, and supplied the interruption and comfort judgments.
+**AI assistance:** I directed the turn-taking trials, performed the spoken interactions, and assessed interruption and comfort. Codex ran test commands and helped organize the observed transcripts and timings under my direction. My observations informed the choice of the 1.5-second silence threshold.
 
 ## D. Storyboard
 
@@ -125,7 +125,7 @@ Part 1E feedback is documented above. I also saved the detector video and record
 
 **Recordings:** [Lab 3 videos — prototype demo and detector recording](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%202%20Videos/Lab%203?d=w6f3a8c3fc42b4b46b473db28230b7c37&csf=1&web=1&e=EchU58).
 
-**AI assistance:** Codex implemented and deployed the prototype, operated the wizard approvals during these checks, and helped document the evidence. I performed the physical trials and confirmed the observed screen states and spoken replies.
+**AI assistance:** I designed and engineered the prototype and directed its implementation, hardware integration, and revisions, including the button, listening LED, and enlarged state display. I performed the physical trials and evaluated the screen states and spoken replies. Codex assisted with coding, deployment, test commands, wizard-controller operation during my checks, and documentation under my direction. The prototype used human approval rather than autonomous replies.
 
 
 ## Interaction redesign
