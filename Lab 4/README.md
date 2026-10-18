@@ -285,13 +285,78 @@ As you develop your Feast Automata concept, consider where the sensor and actuat
 
 **\*\*\*Draw 5 sketches that explore different physical arrangements for your sensing and actuation.\*\*\***
 
+Each sketch pairs one sensor I tested in Parts A–B with the servo from Part C. Sketches 1 and 2 are the same idea with the sensor in two different places, so I can compare how placement changes the interaction.
+
+**1. Thirst Nudge, sensor under the cup.** The proximity sensor (VCNL4040) looks up through a window in the coaster. If the mug sits untouched for N minutes, the servo raises a "sip!" flag. Lifting the mug resets it.
+
+<img src="part-d-sketches/1-thirst-nudge-under-cup.png" alt="Sketch 1: Thirst Nudge with the proximity sensor under the mug" width="600"/>
+
+**2. Thirst Nudge, sensor in a side wall.** Same flag, but the sensor sits in a short wall at mug height and faces sideways. It sees the mug, and also any hand reaching for it.
+
+<img src="part-d-sketches/2-thirst-nudge-side-wall.png" alt="Sketch 2: Thirst Nudge with the proximity sensor in a side wall" width="600"/>
+
+**3. Bite Pacer.** A copper-tape pad on the fork rest is wired to the capacitive touch sensor (MPR121), so setting the fork down marks a pause between bites. The servo moves a needle on a turtle/hare dial: fast bites swing it toward the hare.
+
+<img src="part-d-sketches/3-bite-pacer.png" alt="Sketch 3: Bite Pacer with a copper-tape fork rest and a turtle/hare dial" width="600"/>
+
+**4. Last-Bite Arbiter.** Two copper pads sit on opposite sides of a serving tray. When both diners hold their pad, a servo-driven pointer swings back and forth, then stops at whoever gets the last bite.
+
+<img src="part-d-sketches/4-last-bite-arbiter.png" alt="Sketch 4: Last-Bite Arbiter tray with two touch pads and a servo pointer" width="600"/>
+
+**5. Tea Timer Dipper.** I set the steeping minutes with the rotary encoder and press it to start, and a small screen counts down. A servo arm lowers the tea bag into the mug and lifts it out when time is up.
+
+<img src="part-d-sketches/5-tea-timer-dipper.png" alt="Sketch 5: Tea Timer Dipper with an encoder, countdown screen, and servo arm" width="600"/>
+
+*AI assistance: Claude helped develop concept options, write the sketch briefs and draft this section; the sketch images were made with an AI image generator from those briefs. I chose the concepts, sensor placements and final design.*
+
 **\*\*\*What questions do these sketches raise? What do you need to physically prototype to answer them?\*\*\***
 
+I sorted each sketch's open questions using Houde and Hill's three kinds of design question:
+- **Role:** what the device does in someone's meal.
+- **Look and feel:** what people see, hear and feel.
+- **Implementation:** how it actually works.
+
+Some answers come from my sensor tests: the VCNL4040 reads about 50 at 10 cm and about 250 at 5 cm; the touch sensor needs bare metal; the servo moves roughly 120°.
+
+| Sketch | Role | Look and feel | Implementation |
+|---|---|---|---|
+| 1. Thirst Nudge (under cup) | Is a flag a friendly reminder or nagging? How long should N be? | Is a small flag noticeable during a conversation? | Does the sensor read the mug reliably through the coaster window, including mugs with thick or uneven bases? |
+| 2. Thirst Nudge (side wall) | Is reacting to a reaching hand a bug or a welcome "greeting"? | Does a tall wall make the coaster feel bulky? | Can a threshold tell the mug from a passing hand? A hand at 10 cm already read about 50 in my test; I haven't measured a mug yet. |
+| 3. Bite Pacer | Does pacing feedback help, or feel judgmental? | Is the turtle/hare dial readable at a glance from the seat? | Is the fork rest the right place to sense, or the fork itself? The touch sensor needs bare metal, and the clip cover blocked touches in my test. |
+| 4. Last-Bite Arbiter | Does a machine decision feel fair, and fun enough to accept? | How long should the suspense swing last? | Can a ~120° servo point clearly at two people on opposite sides, or does it need a gear? |
+| 5. Tea Timer Dipper | Is automating a short ritual worth a device on the table? | Does the slow dip read as calm or mechanical? | What arm length and angle clear a real mug rim, and can a 9g servo hold a wet tea bag steady? |
+
+Houde and Hill recommend building several small, focused prototypes rather than one complete one too early. For these sketches, that means three quick tests:
+- **Implementation:** a cardboard coaster with the proximity sensor tried in both placements (sketches 1 and 2), logging readings with a mug, without a mug, and with a hand passing.
+- **Look and feel:** a paper flag or needle taped to the servo arm, to judge visibility and motion speed.
+- **Role:** a short role-play during a real meal or drink, to see whether the nudge or pacing feels helpful.
+
 **\*\*\*Pick one design to prototype and explain why.\*\*\***
+
+How the five compare (my assessment):
+
+| Sketch | Tested parts it uses | What cardboard can answer quickly | Main risk |
+|---|---|---|---|
+| 1. Thirst Nudge (under cup) | VCNL4040 + servo | Sensor through a window, flag visibility | Low; closest to the windmill coaster example |
+| 2. Thirst Nudge (side wall) | VCNL4040 + servo | Mug vs. hand detection | Telling a mug from a hand |
+| 3. Bite Pacer | MPR121 + servo | Where to sense, dial readability | Bare-metal contact; judgmental tone |
+| 4. Last-Bite Arbiter | MPR121 + servo | Suspense timing, pointer clarity | Servo range |
+| 5. Tea Timer Dipper | Encoder + screen + servo | Arm geometry over a real mug | Arm clearance and load |
+
+I picked **sketch 1, Thirst Nudge with the sensor under the cup**. <!-- Draft reasons below; Pablo to confirm or rewrite in his own words. -->
+- **It uses parts I have already tested.** The VCNL4040 reads clearly from 1 to 10 cm (about 50 at 10 cm, 250 at 5 cm, 2000+ at 1 cm). The servo has already made controlled moves on channel 0.
+- **Sensing from below avoids the hand problem.** The side-wall version (sketch 2) also sees reaching hands. With the sensor under the mug, it mostly sees the mug itself.
+- **Cardboard can answer its most important questions quickly.** A cardboard coaster with a window and a paper flag on the servo is enough to test whether the sensor reads the mug through the window (implementation), whether the flag is noticeable (look and feel), and whether the reminder feels friendly or nagging (role).
+
+If it works, sketch 2 can be tested with the same cardboard base, by moving the sensor to a wall.
 
 Build a cardboard or other low-fidelity physical prototype of your design.
 
 **\*\*\*Document your rough prototype with photos and/or video.\*\*\***
+
+> **[Pablo: add photos/video of the cardboard prototype.]**
+
+*Reference: Houde, S., & Hill, C. (1997). What do prototypes prototype? In M. Helander, T. Landauer, & P. Prabhu (Eds.), Handbook of Human-Computer Interaction (2nd ed.). Elsevier.*
 
 ---
 
