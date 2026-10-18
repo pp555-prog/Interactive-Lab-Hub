@@ -1,289 +1,70 @@
 # Ph-UI!!!
 
-<details>
-	<summary><strong>Instructions for Students (Click to Expand)</strong></summary>
-  
-	**Submission Cleanup Reminder:**
-	- This README.md contains extra instructional text for guidance.
-	- Before submitting, remove all instructional text and example prompts from this file.
-	- You may delete these sections or use the toggle/hide feature in VS Code to collapse them for a cleaner look.
-	- Your final submission should be neat, focused on your own work, and easy to read for grading.
-  
-	This helps ensure your README.md is clear, professional, and uniquely yours!
-</details>
+**Author:** Pablo Penalba.
 
----
+For Part 1, I tested each sensor and the servo from the kit one at a time, then designed a Feast Automata concept: the **Thirst Nudge**, a coaster that raises a little "sip!" flag when a drink has sat untouched for too long.
 
----
+**Design and engineering:** I chose the concepts, sensor placements and final design, did all the physical handling in each hardware test, and built the cardboard prototype. **AI assistance:** Under my direction, Claude helped with Pi setup, ran the test scripts over SSH while I handled the hardware, analyzed the logs, made the two small test-script fixes described below, proposed concept options, wrote the sketch briefs, and drafted this report. The sketch images were made with an AI image generator from those briefs.
 
-## Lab Overview
-Team: <canvas group name>  
-Members: Full Name (netid, github-handle), ...  
-Project name: <name>
+# Part 1
 
+## Setup
 
-For lab this week, we focus on both sensing and actuation, bringing new modes of input and output into your devices, while also prototyping the physical structure and overall look of the device. You will consider how the physical form supports sensing and actuation, and how these elements come together to shape the interaction and aesthetics of the device.
+I used a Raspberry Pi 5 (Debian 12, Python 3.11) with a Lab 4 virtual environment installed from `requirements2025.txt`. `pip check` found no broken requirements, and `blinkatest.py` passed (Digital IO, I2C and SPI ok). The Mini PiTFT sits on the Pi's header and the Servo pHAT stacks on top of it.
 
----
+For the sensor tests, I first connected each Qwiic board through a Qwiic cable wired to header pins 1, 3, 5 and 6 (3.3 V, SDA, SCL, GND). For the prototype, the sensor plugs into the Servo pHAT's Qwiic port. Before each test I confirmed the board's I2C address, then ran the example script while doing a beep-cued sequence of actions, so every reading could be matched to what I was doing.
 
-## Lab Structure
+## A. Capacitive sensing (MPR121)
 
-A) [Capacitive Sensing](#part-a)
+The MPR121 was detected at `0x5a`. With an alligator clip on pad 2, `cap_test.py` printed 22 "touched" lines for about 5.5 s of contact, which matched my own estimate of how long I touched it. No other pad fired. In a second run I touched only the clip's plastic cover, three times, and got **zero** detections. The sensor needs bare conductive contact: metal, copper tape, or something conductive like fruit.
 
-B) [More Sensors](#part-b)
+## B. More sensors
 
-C) [Servo Actuation](#part-c)
+### Light / proximity / gesture sensor (APDS-9960)
 
-D) [Physical Interaction Design: Feast Automata](#part-d)
+My first APDS-9960 had its power LED on but never answered on I2C, on either of its Qwiic ports. To separate a cable fault from a board fault, I plugged the MPR121 into the same cable and wires, and it was detected right away. The APDS board was faulty, and the replacement board was detected at `0x39`.
 
-E) [Build & Integrate](#part-e)
+- **Proximity (`proximity_test.py`):** the reading sat at 0 with nothing nearby. My three hand approaches produced three clear rise-and-fall peaks (40, 54 and 57) that returned to 0. The range is short: even at about 1 cm the value stayed far below its 255 maximum.
+- **Gesture (`gesture_test.py`):** my first two runs (at 5–10 cm and at 2–4 cm) detected nothing. Raw sensor data showed that at 2–4 cm my hand saturated all four light channels, and the library discards saturated data. At **5–8 cm** I made eight swipes, one per beep, and it detected 7, each in a consistent direction. In my orientation left and right are mirrored: a left-to-right swipe prints "left". Away printed "up" and toward printed "down".
+- **Color (`color_test.py`):** I held a full-screen red, green and blue phone screen 1–2 cm above the sensor. The matching channel was strongest each time:
 
-F) [Final Documentation](#part-f)
+  | Light | Red | Green | Blue |
+  |---|---|---|---|
+  | Room light | 9,450 | 7,935 | 7,640 |
+  | Red screen | **6,250** | 700 | 1,135 |
+  | Green screen | 3,115 | **6,345** | 2,975 |
+  | Blue screen | 316 | 1,463 | **4,870** |
 
----
+  The script's lux estimate went negative under colored light, so I would use the clear channel for brightness instead.
 
-## Part 1 Lab Preparation
+### Rotary encoder
 
----
+The encoder was detected at `0x36`. With a beep for each step, five clockwise clicks, five counterclockwise clicks and two presses produced exactly five counts each way, plus two press/release pairs: **one count per click**. The example script counted clockwise as negative on my encoder, so I removed its minus sign in `encoder_test.py`.
 
-### Get the latest content:
-As always, pull updates from the class Interactive-Lab-Hub to both your Pi and your own GitHub repo. As we discussed in the class, there are 3 ways you can do so:
+### Joystick
 
+The joystick was detected at `0x20`. It rests at about 512/498 and reaches 0 and 1023 at each extreme. In the orientation I held it, pushing away/toward changed X and left/right changed Y, and the button read 0 when pressed. I changed `joystick_test.py` to print X as left/right, Y as toward/away, and the button as 1 when pressed. Pushing right also moved X to about 760, so code should use thresholds rather than exact values.
 
-Option 1: On the Pi, `cd` to your `Interactive-Lab-Hub`, pull the updates from upstream (class lab-hub) and push the updates back to your own GitHub repo. You will need the personal access token for this.
-```
-pi@ixe00:~$ cd Interactive-Lab-Hub
-pi@ixe00:~/Interactive-Lab-Hub $ git pull upstream Fall2026
-pi@ixe00:~/Interactive-Lab-Hub $ git add .
-pi@ixe00:~/Interactive-Lab-Hub $ git commit -m "get lab4 content"
-pi@ixe00:~/Interactive-Lab-Hub $ git push
-```
+### Distance sensor (VCNL4040)
 
-Option 2: On your own GitHub repo, [create pull request](https://github.com/FAR-Lab/Developing-and-Designing-Interactive-Devices/blob/2021Fall/readings/Submitting%20Labs.md) to get updates from the class Interactive-Lab-Hub. After you have latest updates online, go on your Pi, `cd` to your `Interactive-Lab-Hub` and use `git pull` to get updates from your own GitHub repo.
+The VCNL4040 was detected at `0x60`. The values rise steeply as my hand gets closer, which makes it a good presence detector:
 
-Option 3: (preferred) use the Github.com interface to update the changes.
+| Hand distance | Reading |
+|---|---|
+| Nothing near | 0–2 |
+| ~10 cm | ~50 |
+| ~5 cm | ~250 |
+| ~1 cm | 2,000–2,800 |
 
----
+The script failed to start a few times. Testing showed that about 1 in 100 register writes is rejected, so startup, which makes several writes, fails roughly 1 time in 10. Readings during operation never failed in 300 tries. My prototype code will retry startup.
 
-### Quick Start: Python Environment Setup
+## C. Servo actuation
 
-1. **Create and activate a virtual environment in Lab 4:**
-	```bash
-	cd ~/Interactive-Lab-Hub/Lab\ 4
-	python3 -m venv .venv
-	source .venv/bin/activate
-	```
-2. **Install all Lab 4 requirements:**
-	```bash
-	pip install -r requirements2025.txt
-	```
-3. **Check CircuitPython Blinka installation:**
-	```bash
-	python blinkatest.py
-	```
-	If you see "Hello blinka!", your setup is correct. If not, follow the troubleshooting steps in the file or ask for help.
+The Servo pHAT was detected at `0x40`, with its own USB-C power supply and the servo on channel 0. Instead of the example's endless 0–120° sweep, I first ran a short test: middle, about 20° each way, back to middle. I saw the moves, with no buzzing, jitter or heat. I then stepped the servo through 0°, 30°, 60° and 90° with a paper flag attached, to choose the flag's down and up positions for the prototype.
 
----
+## D. Physical interaction design: Feast Automata
 
-### Gathering materials for this lab:
-
-* Cardboard (start collecting those shipping boxes!)
-* Found objects and materials--like bananas and twigs.
-* Cutting board
-* Cutting tools
-* Markers
-
-
-(We do offer shared cutting board, cutting tools, and markers on the class cart during the lab, so do not worry if you don't have them!)
-
----
-
-### Prototyping References 
-
-* [What do prototypes prototype?](https://www.semanticscholar.org/paper/What-do-Prototypes-Prototype-Houde-Hill/30bc6125fab9d9b2d5854223aeea7900a218f149)
-* [Paper prototyping](https://www.uxpin.com/studio/blog/paper-prototyping-the-practical-beginners-guide/) is used by UX designers to quickly develop interface ideas and run them by people before any programming occurs. 
-* [Cardboard prototypes](https://www.youtube.com/watch?v=k_9Q-KDSb9o) help interactive product designers to work through additional issues, like how big something should be, how it could be carried, where it would sit. 
-* [Tips to Cut, Fold, Mold and Papier-Mache Cardboard](https://makezine.com/2016/04/21/working-with-cardboard-tips-cut-fold-mold-papier-mache/) from Make Magazine.
-* [Surprisingly complicated forms](https://www.pinterest.com/pin/50032245843343100/) can be built with paper, cardstock or cardboard.  The most advanced and challenging prototypes to prototype with paper are [cardboard mechanisms](https://www.pinterest.com/helgangchin/paper-mechanisms/) which move and change. 
-* [Dyson Vacuum Cardboard Prototypes](http://media.dyson.com/downloads/JDF/JDF_Prim_poster05.pdf)
-<p align="center"><img src="https://dysonthedesigner.weebly.com/uploads/2/6/3/9/26392736/427342_orig.jpg"  width="200" > </p>
-
-### Feast Automata Inspirations
-
-* [Simone Giertz - The Breakfast Machine](https://www.youtube.com/watch?v=E2evC2xTNWg) turns an everyday breakfast routine into a deliberately awkward robotic performance.
-* [Pee-wee’s Big Adventure - Breakfast Machine](https://www.classhook.com/resources/1295-pee-wee-s-big-adventure-pee-wee-s-breakfast-machine?utm_source=chatgpt.com) An elaborate Rube Goldberg-style machine turns the ordinary routine of making breakfast into a playful mechanical performance.
-* [Wallace & Gromit - The Autochef](https://www.google.com/search?sca_esv=66d2cd5ecf989ed9&sxsrf=APpeQnuwAWHrA3R0b1GeoQ4r-spKos3vUQ:1789367781228&udm=7&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8cxpBkeIeqYwoCbfNVc4vKE7plZzta63Pe5DpJ3XFR9XzI_yj6fb6bfPt1x_5u3nRcG7tR9jg4Omd7-UnDuaw5i86wRQqe-045kPXObjb1eDS649ikhB0y_hSFYfNioDnA60A2i_oC1IzIZywb7ERnDQqnSx10JnfJEaAauzJXglx4123_vjf0_54bKrF6QjM9ne5i3g&q=Wallace+%26+Gromit+%E2%80%94+The+Autochef&sa=X&ved=2ahUKEwiI0OO3uu2WAxVHEFkFHQ3iAOEQtKgLegQIFRAB&biw=1197&bih=613&dpr=2.5#fpstate=ive&vld=cid:72c3eb07,vid:2igRcGxlshA,st:0)
-* [Nik Ramage - Jelly Wobbler](http://www.youtube.com/watch?v=pj2t71q68sY#t=33) makes the simple act of wobbling jelly into a dedicated machine.
-* [Zekun Chang - Blah Blah](https://zekunchang.com/portfolio/blah-blah/) is an alcohol machine that presents a playful commentary on drunken behavior.
-
-### Mechanical Prototyping Resource
-
-* [Gear Template Generator](https://woodgears.ca/gear_cutting/template.html) can help you prototype simple gear mechanisms for translating servo motion into physical movement.
-
-
----
-
-### Part A
-### Capacitive Sensing, a.k.a. Human-Twizzler Interaction 
-
-We want to introduce you to the [capacitive sensor](https://learn.adafruit.com/adafruit-mpr121-gator) in your kit. It's one of the most flexible input devices we are able to provide. At boot, it measures the capacitance on each of the 12 contacts. Whenever that capacitance changes, it considers it a user touch. You can attach any conductive material. In your kit, you have copper tape that will work well, but don't limit yourself! In the example below, we use Twizzlers--you should pick your own objects.
-
-
-<p float="left">
-<img src="https://cdn-learn.adafruit.com/guides/cropped_images/000/003/226/medium640/MPR121_top_angle.jpg?1609282424" height="150" />
- 
-</p>
-
-Plug in the capacitive sensor board with the QWIIC connector. Connect your Twizzlers with either the copper tape or the alligator clips (the clips work better). Install the latest requirements from your working virtual environment:
-
-These Twizzlers are connected to pads 6 and 10. When you run the code and touch a Twizzler, the terminal will print out the following
-
-```
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python cap_test.py 
-Twizzler 10 touched!
-Twizzler 6 touched!
-```
-
----
-
-### Part B
-### More sensors
-
-#### Light/Proximity/Gesture sensor (APDS-9960)
-
-We here want you to get to know this awesome sensor [Adafruit APDS-9960](https://www.adafruit.com/product/3595). It is capable of sensing proximity, light (also RGB), and gesture! 
- 
-<img src="https://cdn-shop.adafruit.com/970x728/3595-06.jpg" width=200>
- 
-
-Connect it to your pi with Qwiic connector and try running the three example scripts individually to see what the sensor is capable of doing!
-
-```
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python proximity_test.py
-...
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python gesture_test.py
-...
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python color_test.py
-...
-```
-
-You can go the the [Adafruit GitHub Page](https://github.com/adafruit/Adafruit_CircuitPython_APDS9960) to see more examples for this sensor!
-
-#### Rotary Encoder 
-
-A rotary encoder is an electro-mechanical device that converts the angular position to analog or digital output signals. The [Adafruit rotary encoder](https://www.adafruit.com/product/4991#technical-details) we ordered for you came pre-soldered, so you do NOT need to solder anything.
-<p float="left">
-
-   
-<img src="https://cdn-shop.adafruit.com/970x728/377-02.jpg" height="200" />
-<img src="https://cdn-shop.adafruit.com/970x728/4991-09.jpg" height="200">
-</p>
-
-Connect it to your pi with Qwiic connector and try running the example script, it comes with an additional button which might be useful for your design!
-
-```
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python encoder_test.py
-```
-
-You can go to the [Adafruit Learn Page](https://learn.adafruit.com/adafruit-i2c-qt-rotary-encoder/python-circuitpython) to learn more about the sensor! The sensor actually comes with an LED (neo pixel): Can you try lighting it up? 
-
-#### Joystick 
-
-
-A [joystick](https://www.sparkfun.com/products/15168) can be used to sense and report the input of the stick for it pivoting angle or direction. It also comes with a button input!
-
-<p float="left">
-<img src="https://cdn.sparkfun.com//assets/parts/1/3/5/5/8/15168-SparkFun_Qwiic_Joystick-01.jpg" height="200" />
-</p>
-
-Connect it to your pi with Qwiic connector and try running the example script to see what it can do!
-
-```
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python joystick_test.py
-```
-
-You can go to the [SparkFun GitHub Page](https://github.com/sparkfun/Qwiic_Joystick_Py) to learn more about the sensor!
-
-#### Distance Sensor
-
-
-Earlier we have asked you to play with the proximity sensor, which is able to sense objects within a short distance. Here, we offer [Sparkfun Proximity Sensor Breakout](https://www.sparkfun.com/products/15177), With the ability to detect objects up to 20cm away.
-
-<p float="left">
-<img src="https://cdn.sparkfun.com//assets/parts/1/3/5/9/2/15177-SparkFun_Proximity_Sensor_Breakout_-_20cm__VCNL4040__Qwiic_-01.jpg" height="200" />
-
-</p>
-
-Connect it to your pi with Qwiic connector and try running the example script to see how it works!
-
-```
-(circuitpython) pi@ixe00:~/Interactive-Lab-Hub/Lab 4 $ python qwiic_distance.py
-```
-
-You can go to the [SparkFun GitHub Page](https://github.com/sparkfun/Qwiic_Proximity_Py) to learn more about the sensor and see other examples
-
----
-
-### Part C
-### Servo Actuation
-
-Now that you have explored several forms of sensing, add physical output by learning to control a servo motor. Complete the Servo pHAT setup and basic servo test before beginning your interaction design.
-
-### Servo Control with SparkFun Servo pHAT
-For this lab, you will use the **SparkFun Servo pHAT** to control a micro servo (such as the Miuzei MS18 or similar 9g servo). The Servo pHAT stacks directly on top of the Adafruit Mini PiTFT (135×240) display without pin conflicts:
-- The Mini PiTFT uses SPI (GPIO22, 23, 24, 25) for display and buttons ([SPI pinout](https://pinout.xyz/pinout/spi)).
-- The Servo pHAT uses I²C (GPIO2 & 3) for the PCA9685 servo driver ([I2C pinout](https://pinout.xyz/pinout/i2c)).
-- Since SPI and I²C are separate buses, you can use both boards together.
-**⚡ Power:**
-- Plug a USB-C cable into the Servo pHAT to provide enough current for the servos. The Pi itself should still be powered by its own USB-C supply. Do NOT power servos from the Pi’s 5V rail.
-
-<p align="center">
-    <img src="Servo_pHAT.gif" alt="Servo pHAT Demo" width="400"/>
-</p>
-
-**Basic Python Example:**
-We provide a simple example script: `Lab 4/pi_servo_hat_test.py` (requires the `pi_servo_hat` Python package).
-Run the example:
-```
-python pi_servo_hat_test.py
-```
-For more details and advanced usage, see the [official SparkFun Servo pHAT documentation](https://learn.sparkfun.com/tutorials/pi-servo-phat-v2-hookup-guide/all#resources-and-going-further).
-A servo motor is a rotary actuator that allows for precise control of angular position. The position is set by the width of an electrical pulse (PWM). You can read [this Adafruit guide](https://learn.adafruit.com/adafruit-arduino-lesson-14-servo-motors/servo-motors) to learn more about how servos work.
-
----
-
-### Part D
-### Physical Interaction Design: Feast Automata
-
-**Feast Automata:** build a device that **transforms ordinary dining rituals into playful physical interactions.** Begin with a familiar experience around eating, drinking, cooking, serving, or sharing food, and explore how sensing and actuation might augment, exaggerate, automate, or reinterpret your dining experience.
-
-In this part, use the sensing techniques from Parts A–B and the servo actuation from Part C to develop a physical interaction.
-
-#### Physical considerations for sensing
-
-Sensors need to be positioned in specific locations or orientations to make them useful for an application. Choose a sensor that fits the dining interaction you want to explore. For example, a distance sensor could detect when a cup is placed on a coaster; where the sensor is positioned determines what it can reliably detect.
-
-Think about how the larger object needs to be shaped so the sensor can work reliably, where the actuator needs to sit, what moves, and how a person encounters the interaction.
-
-#### Physical Form and Housing
-
-Think about how your sensor, actuator, and electronics are physically arranged within your prototype. Consider where components need to be placed, what parts move, how the device is supported or enclosed, and how the overall form and aesthetics shape the interaction.
-
-Use cardboard, paper, found objects, or other low-fidelity materials to quickly prototype the physical structure before refining your final design.
-
-#### Optional Display Feedback: Qwiic OLED
-
-Your kit includes these [SparkFun Qwiic OLED screens](https://www.sparkfun.com/products/17153). These use less power than the MiniTFTs you have mounted on the GPIO pins of the Pi, but, more importantly, they can be more flexibly mounted elsewhere on your physical interface. The way you program this display is almost identical to the way you program a  Pi display. Take a look at `oled_test.py` and some more of the [Adafruit examples](https://github.com/adafruit/Adafruit_CircuitPython_SSD1306/tree/master/examples).
-
-<p float="left">
-<img src="https://cdn.sparkfun.com//assets/parts/1/6/1/3/5/17153-SparkFun_Qwiic_OLED_Display__0.91_in__128x32_-01.jpg" height="200" />
-
-</p>
-
-
-As you develop your Feast Automata concept, consider where the sensor and actuator need to be placed, what parts move, how electronics are housed, and how the overall form and aesthetics support the interaction.
-
-**\*\*\*Draw 5 sketches that explore different physical arrangements for your sensing and actuation.\*\*\***
+### Five sketches of different physical arrangements
 
 Each sketch pairs one sensor I tested in Parts A–B with the servo from Part C. Sketches 1 and 2 are the same idea with the sensor in two different places, so I can compare how placement changes the interaction.
 
@@ -309,7 +90,7 @@ Each sketch pairs one sensor I tested in Parts A–B with the servo from Part C.
 
 *AI assistance: Claude helped develop concept options, write the sketch briefs and draft this section; the sketch images were made with an AI image generator from those briefs. I chose the concepts, sensor placements and final design.*
 
-**\*\*\*What questions do these sketches raise? What do you need to physically prototype to answer them?\*\*\***
+### What questions do these sketches raise? What do I need to physically prototype to answer them?
 
 I sorted each sketch's open questions using Houde and Hill's three kinds of design question:
 - **Role:** what the device does in someone's meal.
@@ -331,7 +112,7 @@ Houde and Hill recommend building several small, focused prototypes rather than 
 - **Look and feel:** a paper flag or needle taped to the servo arm, to judge visibility and motion speed.
 - **Role:** a short role-play during a real meal or drink, to see whether the nudge or pacing feels helpful.
 
-**\*\*\*Pick one design to prototype and explain why.\*\*\***
+### The design I picked, and why
 
 How the five compare (my assessment):
 
@@ -343,25 +124,36 @@ How the five compare (my assessment):
 | 4. Last-Bite Arbiter | MPR121 + servo | Suspense timing, pointer clarity | Servo range |
 | 5. Tea Timer Dipper | Encoder + screen + servo | Arm geometry over a real mug | Arm clearance and load |
 
-I picked **sketch 1, Thirst Nudge with the sensor under the cup**. <!-- Draft reasons below; Pablo to confirm or rewrite in his own words. -->
+I picked **sketch 1, Thirst Nudge with the sensor under the cup**.
 - **It uses parts I have already tested.** The VCNL4040 reads clearly from 1 to 10 cm (about 50 at 10 cm, 250 at 5 cm, 2000+ at 1 cm). The servo has already made controlled moves on channel 0.
 - **Sensing from below avoids the hand problem.** The side-wall version (sketch 2) also sees reaching hands. With the sensor under the mug, it mostly sees the mug itself.
 - **Cardboard can answer its most important questions quickly.** A cardboard coaster with a window and a paper flag on the servo is enough to test whether the sensor reads the mug through the window (implementation), whether the flag is noticeable (look and feel), and whether the reminder feels friendly or nagging (role).
 
 If it works, sketch 2 can be tested with the same cardboard base, by moving the sensor to a wall.
 
-Build a cardboard or other low-fidelity physical prototype of your design.
+### Rough prototype
 
-**\*\*\*Document your rough prototype with photos and/or video.\*\*\***
+<img width="400" alt="IMG_9456" src="https://github.com/user-attachments/assets/20d877d4-ae88-401c-8d02-d4b49a34494b" />
+<img width="400" alt="IMG_9457 (1)" src="https://github.com/user-attachments/assets/42133033-d65f-4b4b-b588-f85ec9de0320" />
 
-<img width="4284" height="5712" alt="IMG_9456" src="https://github.com/user-attachments/assets/20d877d4-ae88-401c-8d02-d4b49a34494b" />
-<img width="4284" height="5712" alt="IMG_9457 (1)" src="https://github.com/user-attachments/assets/42133033-d65f-4b4b-b588-f85ec9de0320" />
+
+I built the coaster from cardboard, with a small hole in the top layer and the VCNL4040 taped underneath, facing up through it. A paper "sip!" flag on a toothpick is taped to the servo horn. With a beep for each step, I measured the sensor through the window:
+
+| Situation | Reading |
+|---|---|
+| No mug | ~49 |
+| My mug on the coaster | ~12,100 (steady) |
+| Mug lifted about 5 cm | 190–1,000 |
+| Mug removed, my hand passing about 10 cm above | 48–72 |
+
+A resting mug reads about 250 times higher than the empty coaster, and my hand barely registers. That confirms the under-the-cup placement avoids the hand problem. A threshold around 3,000 separates "mug on the coaster" from lifted or absent with a wide margin on both sides. I measured only my own mug, so a different mug should be checked once.
 
 *Reference: Houde, S., & Hill, C. (1997). What do prototypes prototype? In M. Helander, T. Landauer, & P. Prabhu (Eds.), Handbook of Human-Computer Interaction (2nd ed.). Elsevier.*
 
----
+# Part 2
 
-## Part 2
+<details>
+<summary><strong>Part 2 instructions (to be replaced with my Part 2 work)</strong></summary>
 
 Following exploration and reflection from Part 1, complete the "looks like," "works like" and "acts like" prototypes for your design, reiterated below.
 
@@ -569,3 +361,5 @@ For submission, the readme.md page for this lab should be edited to include the 
 * Upload any materials that explain what you did, into your lab 4 repository, and link them in your lab 4 readme.md.
 * Link your Lab 4 readme.md in your main Interactive-Lab-Hub readme.md. 
 * Labs are due on Mondays, make sure to submit your Lab 4 readme.md to Canvas.
+
+</details>
