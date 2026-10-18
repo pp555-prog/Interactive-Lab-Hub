@@ -19,10 +19,13 @@ def runExample():
 
 	while True:
 
+		# our board is mounted rotated 90 degrees, so swap the axes:
+		# X is left (0) to right (1023), Y is toward (0) to away (1023)
+		# the raw button reads 0 when pressed, so invert it: 1 = pressed
 		print("X: %d, Y: %d, Button: %d" % ( \
-					myJoystick.horizontal, \
 					myJoystick.vertical, \
-					myJoystick.button))
+					myJoystick.horizontal, \
+					1 - myJoystick.button))
 
 		time.sleep(.5)
 
