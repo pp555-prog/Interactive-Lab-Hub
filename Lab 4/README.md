@@ -88,7 +88,7 @@ Each sketch pairs one sensor I tested in Parts A–B with the servo from Part C.
 
 <img src="part-d-sketches/5-tea-timer-dipper.png" alt="Sketch 5: Tea Timer Dipper with an encoder, countdown screen, and servo arm" width="600"/>
 
-*AI assistance: Claude helped develop concept options, write the sketch briefs and draft this section; the sketch images were made with an AI image generator from those briefs. I chose the concepts, sensor placements and final design.*
+*AI assistance: Claude helped develop concept options, write the sketch briefs and draft this section; I chose the concepts, sensor placements and final design.*
 
 ### What questions do these sketches raise? What do I need to physically prototype to answer them?
 
