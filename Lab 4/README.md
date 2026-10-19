@@ -97,7 +97,7 @@ I sorted each sketch's open questions using Houde and Hill's three kinds of desi
 - **Look and feel:** what people see, hear and feel.
 - **Implementation:** how it actually works.
 
-Some answers come from my sensor tests: the VCNL4040 reads about 50 at 10 cm and about 250 at 5 cm; the touch sensor needs bare metal; the servo moves roughly 120°.
+Some answers come from my sensor tests: the VCNL4040 reads about 50 at 10 cm and about 250 at 5 cm; the touch sensor needs bare metal; the course's servo example uses a 0–120° range.
 
 | Sketch | Role | Look and feel | Implementation |
 |---|---|---|---|
@@ -173,9 +173,13 @@ In a cued test run, every step happened at the right time:
 | Mug lifted, flag dropped | 30.3 s |
 | Mug back, timer restarted | 36.1 s |
 
-## Iterations
+**Video of the working prototype:** [Lab 4 videos folder](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%20Videos/Lab%204?d=w1cb3a279f84142d3a9b70333eb1812ed&csf=1&web=1&e=aixaXl)
 
-<img width="399" height="708" alt="image" src="https://github.com/user-attachments/assets/d1f166fb-eca4-410c-b619-c944f5e0b78a" />
+<img width="399" height="708" alt="The Thirst Nudge prototype" src="https://github.com/user-attachments/assets/d1f166fb-eca4-410c-b619-c944f5e0b78a" />
+
+*The Thirst Nudge prototype.*
+
+## Iterations
 
 Each change below came from something I measured or saw while building the Thirst Nudge.
 
@@ -201,7 +205,6 @@ I used the Thirst Nudge myself with my own mug, following the cued run above. I 
 
 **Still open:**
 - I tested it only on myself. Someone else might react differently to the flag, and they wouldn't know in advance what it means.
-  https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%20Videos/Lab%204?d=w1cb3a279f84142d3a9b70333eb1812ed&csf=1&web=1&e=aixaXl
 - The reminder wiggle hasn't appeared in a test run yet.
 - The everyday nudge delay is undecided. I use 20 s for demos; real use would be several minutes.
 
