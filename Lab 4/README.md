@@ -4,7 +4,7 @@
 
 For Part 1, I tested each sensor and the servo from the kit one at a time, then designed a Feast Automata concept: the **Thirst Nudge**, a coaster that raises a little "sip!" flag when a drink has sat untouched for too long.
 
-**Design and engineering:** I chose the concepts, sensor placements and final design, did all the physical handling in each hardware test, and built the cardboard prototype. **AI assistance:** Under my direction, Claude helped with Pi setup, ran the test scripts over SSH while I handled the hardware, analyzed the logs, made the two small test-script fixes described below, proposed concept options, wrote the sketch and diagram briefs, wrote `thirst_nudge.py` to my specification, and drafted this report.
+**Design and engineering:** I chose the concepts, sensor placements and final design, did all the physical handling in each hardware test, and built the cardboard prototype. **AI assistance:** Under my direction, Claude helped with Pi setup, ran the test scripts over SSH while I handled the hardware, analyzed the logs, made the two small test-script fixes described below, proposed concept options, wrote the sketch and diagram briefs, wrote thirst_nudge.py to my specification, and drafted this report. The second video in the folder is not footage of a working physical prototype. It is an AI-generated fictional prototype created with Seedance 2.5. The approach was inspired by the fictional/vision prototypes discussed in What Do Prototypes Prototype?, where scenarios can be used to make the proposed role of a future artifact concrete for an audience.
 
 # Part 1
 
