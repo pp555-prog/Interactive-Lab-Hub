@@ -4,7 +4,7 @@
 
 For Part 1, I tested each sensor and the servo from the kit one at a time, then designed a Feast Automata concept: the **Thirst Nudge**, a coaster that raises a little "sip!" flag when a drink has sat untouched for too long.
 
-**Design and engineering:** I chose the concepts, sensor placements and final design, did all the physical handling in each hardware test, and built the cardboard prototype. **AI assistance:** Under my direction, Claude helped with Pi setup, ran the test scripts over SSH while I handled the hardware, analyzed the logs, made the two small test-script fixes described below, proposed concept options, wrote the sketch briefs, and drafted this report. The sketch images were made with an AI image generator from those briefs.
+**Design and engineering:** I chose the concepts, sensor placements and final design, did all the physical handling in each hardware test, and built the cardboard prototype. **AI assistance:** Under my direction, Claude helped with Pi setup, ran the test scripts over SSH while I handled the hardware, analyzed the logs, made the two small test-script fixes described below, proposed concept options, wrote the sketch and diagram briefs, wrote `thirst_nudge.py` to my specification, and drafted this report. The sketch images and the Part 2 interaction diagram were made with an AI image generator from those briefs.
 
 # Part 1
 
@@ -152,214 +152,62 @@ A resting mug reads about 250 times higher than the empty coaster, and my hand b
 
 # Part 2
 
-<details>
-<summary><strong>Part 2 instructions (to be replaced with my Part 2 work)</strong></summary>
+## E. Build and integrate: sensing + actuation
 
-Following exploration and reflection from Part 1, complete the "looks like," "works like" and "acts like" prototypes for your design, reiterated below.
+The Thirst Nudge runs as [`thirst_nudge.py`](thirst_nudge.py), adapted from the course's `windmill_coaster.py`.
+- The VCNL4040 under the coaster window is read every 0.2 s.
+- Three readings in a row at or above 3,000 (about 0.6 s) mean the mug is resting, and a timer starts.
+- After 20 s untouched (a demo value; real use would be minutes), the servo raises the "sip!" flag from 0° to 90° over 1.5 s, then wiggles it every 30 s.
+- Lifting the mug drops the flag immediately and counts a sip. Putting the mug back restarts the timer.
 
----
+<img src="part-e/interaction-diagram.png" alt="Thirst Nudge interaction diagram: person and mug, VCNL4040 sensor, Raspberry Pi 5 running thirst_nudge.py, Servo pHAT, and flag servo, with the EMPTY, RESTING and NUDGING states" width="800"/>
 
-### Part E
+*In the diagram, "flag drops" on the arrow from RESTING applies only when the flag is up; in RESTING the flag is already down, so lifting the mug there only counts a sip.*
 
-#### Build & Integrate: Sensing + Actuation
+In a cued test run, every step happened at the right time:
 
-For Part 2, build the Feast Automata interaction you developed in Part D by connecting sensing/input to physical actuation.
+| Event | Time after the "place the mug" cue |
+|---|---|
+| Mug detected, timer started | 2.3 s |
+| Flag began rising (20.1 s after placement) | 22.3 s |
+| Mug lifted, flag dropped | 30.3 s |
+| Mug back, timer restarted | 36.1 s |
 
-**Your prototype should:**
-- Use at least one sensing or input device.
-- Use servo-based physical actuation.
-- Connect sensing and actuation into a meaningful interaction around eating, drinking, cooking, serving, or sharing food.
-- Additional inputs, displays, LEDs, buttons, or other outputs are optional extensions.
+## Iterations
 
-**Document your system with:**
-- Code for your sensing + actuation prototype
-- Photos and/or video of the working prototype in action
-- A simple interaction diagram or sketch showing how sensing and actuation are connected
-- Written reflection: What did you learn about connecting sensing, movement, and physical form? What was fun, surprising, or challenging?
+Each change below came from something I measured or saw while building the Thirst Nudge.
 
-**Questions to consider:**
-- How does your chosen sensor or input shape the physical response?
-- How does the physical arrangement of the sensor and actuator change the interaction?
-- What thresholds, timing, or movement patterns make the interaction feel clear or playful?
-- What changes when you adjust the sensor placement or servo motion?
+1. **Choosing the sensor.** Both the APDS-9960 and the VCNL4040 sense proximity. My hand at about 1 cm only reached about 57 on the APDS-9960, out of 255. The VCNL4040 read about 50 at 10 cm, 250 at 5 cm and over 2,000 at 1 cm. I chose the VCNL4040 because its large, steady numbers make "mug or no mug" easy to tell apart.
 
-Iterate on the sensing, movement, and physical form, and document what you discover.
+2. **Connecting the sensor.** For the sensor tests, I connected each board with a Qwiic cable wired to the Pi's header pins. Once the Mini PiTFT and the Servo pHAT were stacked on the Pi, those pins were covered, so I moved the sensor to the Servo pHAT's Qwiic port. The sensor and the servo board were both detected there, with no extra wiring.
 
-See encoder_accel_servo_dashboard.py in the Lab 4 folder for an optional example of chaining together three devices.
+3. **Placing the sensor.** I prototyped sketch 1, with the sensor under the mug looking up through a hole in the coaster. Through the hole it read about 49 with no mug, about 12,100 with my mug resting on it, and 190–1,000 with the mug lifted about 5 cm. My hand passing about 10 cm above the empty coaster only reached 72, so the under-mug placement avoids the hand problem I expected with the side-wall version (sketch 2). I haven't built the side-wall version, so that comparison is still a prediction.
 
-**`Lab 4/encoder_accel_servo_dashboard.py`**
+4. **Setting the threshold.** The windmill coaster example uses a threshold of 100. With my coaster, a mug lifted a few centimeters still read up to about 1,000, so a threshold of 100 would never notice a sip. I set the threshold to 3,000: about three times the highest lifted reading and about four times below a resting mug. The empty coaster also read about 49 instead of the 0–2 I measured in open air, probably because the cardboard around the hole reflects some of the sensor's light. That is still far below the threshold.
 
-#### Example Application: Windmill Coaster
+5. **Ignoring odd readings.** Setting the mug down produced one spike to 16,561, and single readings can jump. I made the script wait for three readings in a row (about 0.6 s) before deciding the mug was placed or lifted. In the test run, each placement and lift registered about 2 s after its cue, which includes my own reaction time.
 
-Now that you have explored both sensing and actuation, here is a simple example that combines the two.
+6. **Making startup reliable.** The VCNL4040 occasionally rejects a setting when the script starts. I measured about 1 rejected write in 100, which made startup fail roughly 1 time in 10, while 300 readings in a row never failed. I added a retry loop to the startup.
 
-The **Windmill Coaster** uses a Qwiic distance/proximity sensor to detect when a cup is placed on a coaster. When the cup is detected, a servo motor animates a small windmill by sweeping it back and forth, turning an ordinary action during drinking into a playful physical interaction.
+7. **Finding the flag's two positions.** I first stepped the servo through 0°, 30°, 60° and 90°, but none of those looked like a clear "down" and "up". The interaction only needs two positions, so I re-seated the servo horn so the flag lies flat at 0° and stands upright at 90°, then checked those two positions on their own.
 
-<p align="center">
-    <img src="windmill_coaster11.gif" alt="Windmill Coaster Demo" width="400"/>
-</p>
+8. **Designing the motion.** The flag rises slowly, over 1.5 s, so the nudge feels gentle. It drops instantly when I lift the mug, as a quick acknowledgment of the sip. While the flag is up, it wiggles every 30 s as a reminder.
 
+## Acts like: self-test
 
-This example demonstrates a simple interaction pipeline:
+I used the Thirst Nudge myself with my own mug, following the cued run above. I noticed the flag right away when it rose. The nudge felt **funny** rather than nagging. When I lifted the mug, the flag dropping read as an **acknowledgment** of the sip. Nothing else stood out: the 20 s demo delay, the flag size and the motion speed all seemed fine for a demo.
 
-**cup placed → distance sensor detects cup → servo actuates windmill**
+**Still open:**
+- I tested it only on myself. Someone else might react differently to the flag, and they wouldn't know in advance what it means.
+- The reminder wiggle hasn't appeared in a test run yet.
+- The everyday nudge delay is undecided. I use 20 s for demos; real use would be several minutes.
 
-Connect the Qwiic distance sensor to the Pi and connect the servo to Channel 0 of the Servo pHAT. Make sure the Servo pHAT is powered through its USB-C connection.
+## Reflection
 
-Run the example script:
+**Connecting sensing and movement.** Deciding when the device should *not* move mattered as much as deciding when it should. The sensor reports a value five times a second, but the flag only moves when the state changes. Most of the behavior comes from choosing those moments.
 
-```bash
-python windmill_coaster.py
-```
+**Placement, thresholds and timing.** The use case and the sensitivity it needs drove my choices about where the sensor goes, what threshold to use, and how quickly the device reacts. A coaster has to notice a mug being lifted for a sip but ignore a passing hand. That is why the sensor sits under the mug, the threshold is 3,000, and the script waits for three readings before reacting.
 
-The script continuously reads the proximity value from the distance sensor. When the value passes a threshold, the servo begins animating the windmill. When the cup is removed, the servo stops and returns to its resting position.
+**What was challenging and surprising.** The first APDS-9960 was defective, and my progress stalled until I worked out that the board, not my wiring, was the problem. I feel I could have done much more without that delay and with more time. It was also surprising to get first-hand experience with these sensors and see how they actually behave, and it got me thinking about many other use cases that I'm excited to explore.
 
-You may need to adjust `CUP_THRESHOLD` in [`windmill_coaster.py`](windmill_coaster.py) depending on the size of your cup and the physical placement of the sensor. You can run `qwiic_distance.py` first to compare readings with and without a cup.
-
-Use this example as a starting point. Change the sensor, movement, physical form, or dining interaction to create your own Feast Automata variation.
-
-#### Optional Extensions
-
-The following examples are optional resources if you want to add more inputs or outputs to your prototype.
-
-##### Using Multiple Qwiic Buttons: Changing I2C Address (Physically & Digitally)
-
-If you want to use more than one Qwiic Button in your project, you must give each button a unique I2C address. There are two ways to do this:
-
-##### 1. Physically: Soldering Address Jumpers
-
-On the back of the Qwiic Button, you'll find four solder jumpers labeled A0, A1, A2, and A3. By bridging these with solder, you change the I2C address. Only one button on the chain can use the default address (0x6F).
-
-**Address Table:**
-
-| A3 | A2 | A1 | A0 | Address (hex) |
-|----|----|----|----|---------------|
-|  0 |  0 |  0 |  0 |    0x6F       |
-|  0 |  0 |  0 |  1 |    0x6E       |
-|  0 |  0 |  1 |  0 |    0x6D       |
-|  0 |  0 |  1 |  1 |    0x6C       |
-|  0 |  1 |  0 |  0 |    0x6B       |
-|  0 |  1 |  0 |  1 |    0x6A       |
-|  0 |  1 |  1 |  0 |    0x69       |
-|  0 |  1 |  1 |  1 |    0x68       |
-|  1 |  0 |  0 |  0 |    0x67       |
-| ...| ...| ...| ... |     ...      |
-
-For example, if you solder A0 closed (leave A1, A2, A3 open), the address becomes 0x6E.
-
-**Soldering Tips:**
-- Use a small amount of solder to bridge the pads for the jumper you want to close.
-- Only one jumper needs to be closed for each address change (see table above).
-- Power cycle the button after changing the jumper.
-
-##### 2. Digitally: Using Software to Change Address
-
-You can also change the address in software (temporarily or permanently) using the example script `qwiic_button_ex6_changeI2CAddress.py` in the Lab 4 folder. This is useful if you want to reassign addresses without soldering.
-
-Run the script and follow the prompts:
-```bash
-python qwiic_button_ex6_changeI2CAddress.py
-```
-Enter the new address (e.g., 5B for 0x5B) when prompted. Power cycle the button after changing the address.
-
-**Note:** The software method is less foolproof and you need to make sure to keep track of which button has which address!
-
-
-##### Using Multiple Buttons in Code
-
-After setting unique addresses, you can use multiple buttons in your script. See these example scripts in the Lab 4 folder:
-
-- **`qwiic_1_button.py`**: Basic example for reading a single Qwiic Button (default address 0x6F). Run with:
-	```bash
-	python qwiic_1_button.py
-	```
-
-- **`qwiic_button_led_demo.py`**: Demonstrates using two Qwiic Buttons at different addresses (e.g., 0x6F and 0x6E) and controlling their LEDs. Button 1 toggles its own LED; Button 2 toggles both LEDs. Run with:
-	```bash
-	python qwiic_button_led_demo.py
-	```
-
-Here is a minimal code example for two buttons:
-```python
-import qwiic_button
-
-# Default button (0x6F)
-button1 = qwiic_button.QwiicButton()
-# Button with A0 soldered (0x6E)
-button2 = qwiic_button.QwiicButton(0x6E)
-
-button1.begin()
-button2.begin()
-
-while True:
-		if button1.is_button_pressed():
-				print("Button 1 pressed!")
-		if button2.is_button_pressed():
-				print("Button 2 pressed!")
-```
-
-For more details, see the [Qwiic Button Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-button-hookup-guide/all#i2c-address).
-
----
-
-##### PCF8574 GPIO Expander: Add More Pins Over I²C
-
-Sometimes your Pi’s header GPIO pins are already full (e.g., with a display or HAT). That’s where an I²C GPIO expander comes in handy.
-
-We use the Adafruit PCF8574 I²C GPIO Expander, which gives you 8 extra digital pins over I²C. It’s a great way to prototype with LEDs, buttons, or other components on the breadboard without worrying about pin conflicts—similar to how Arduino users often expand their pinouts when prototyping physical interactions.
-
-**Why is this useful?**
-- You only need two wires (I²C: SDA + SCL) to unlock 8 extra GPIOs.
-- It integrates smoothly with CircuitPython and Blinka.
-- It allows a clean prototyping workflow when the Pi’s 40-pin header is already occupied by displays, HATs, or sensors.
-- Makes breadboard setups feel more like an Arduino-style prototyping environment where it’s easy to wire up interaction elements.
-
-**Demo Script:** `Lab 4/gpio_expander.py`
-
-<p align="center">
-    <img src="gpio_leds.gif" alt="GPIO Expander LED Demo" width="400"/>
-</p>
-
-We connected 8 LEDs (through 220 Ω resistors) to the expander and ran a little light show. The script cycles through three patterns:
-- Chase (one LED at a time, left to right)
-- Knight Rider (back-and-forth sweep)
-- Disco (random blink chaos)
-
-Every few runs, the script swaps to the next pattern automatically:
-```bash
-python gpio_expander.py
-```
-
-This is a playful way to visualize how the expander works, but the same technique applies if you wanted to prototype buttons, switches, or other interaction elements. It’s a lightweight, flexible addition to your prototyping toolkit.
-
----
-
-
----
-
----
-
-### Part F
-
-### Final Documentation
-
-Document all the prototypes and iterations you have designed and worked on! Again, deliverables for this lab are writings, sketches, photos, and videos that show what your prototype:
-* "Looks like": shows how the device should look, feel, sit, weigh, etc.
-* "Works like": shows what the device can do
-* "Acts like": shows how a person would interact with the device
-
----
-
-## Deliverables \& Submission for Lab 4
-
-The deliverables for this lab are, writings, sketches, photos, and videos that show what your prototype:
-* "Looks like": shows how the device should look, feel, sit, weigh, etc.
-* "Works like": shows what the device can do.
-* "Acts like": shows how a person would interact with the device.
-
-For submission, the readme.md page for this lab should be edited to include the work you have done:
-* Upload any materials that explain what you did, into your lab 4 repository, and link them in your lab 4 readme.md.
-* Link your Lab 4 readme.md in your main Interactive-Lab-Hub readme.md. 
-* Labs are due on Mondays, make sure to submit your Lab 4 readme.md to Canvas.
-
-</details>
+**Next steps.** I ran out of time for the physical form. With more time, I would make a better design using the 3D printers and laser cutter: a laser-cut coaster with a clean sensor window and a printed flag mount.
