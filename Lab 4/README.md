@@ -175,8 +175,7 @@ In a cued test run, every step happened at the right time:
 
 ## Iterations
 
-<img width="395" height="711" alt="image" src="https://github.com/user-attachments/assets/078674af-65b5-4d9c-94c1-183301fb6734" />
-
+<img width="399" height="708" alt="image" src="https://github.com/user-attachments/assets/d1f166fb-eca4-410c-b619-c944f5e0b78a" />
 
 Each change below came from something I measured or saw while building the Thirst Nudge.
 
