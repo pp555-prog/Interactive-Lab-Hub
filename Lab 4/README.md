@@ -202,6 +202,7 @@ I used the Thirst Nudge myself with my own mug, following the cued run above. I 
 
 **Still open:**
 - I tested it only on myself. Someone else might react differently to the flag, and they wouldn't know in advance what it means.
+  https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%20Videos/Lab%204?d=w1cb3a279f84142d3a9b70333eb1812ed&csf=1&web=1&e=aixaXl
 - The reminder wiggle hasn't appeared in a test run yet.
 - The everyday nudge delay is undecided. I use 20 s for demos; real use would be several minutes.
 
