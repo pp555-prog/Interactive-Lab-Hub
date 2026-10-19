@@ -175,6 +175,9 @@ In a cued test run, every step happened at the right time:
 
 ## Iterations
 
+<img width="395" height="711" alt="image" src="https://github.com/user-attachments/assets/078674af-65b5-4d9c-94c1-183301fb6734" />
+
+
 Each change below came from something I measured or saw while building the Thirst Nudge.
 
 1. **Choosing the sensor.** Both the APDS-9960 and the VCNL4040 sense proximity. My hand at about 1 cm only reached about 57 on the APDS-9960, out of 255. The VCNL4040 read about 50 at 10 cm, 250 at 5 cm and over 2,000 at 1 cm. I chose the VCNL4040 because its large, steady numbers make "mug or no mug" easy to tell apart.
