@@ -1,8 +1,6 @@
 # Observant Systems: Overnight Sensation
 
-**Team:**
-
-**Members:** Full Name (netid, github-handle), ...
+**Members:** Pablo Penalba (pp555)
 
 **Project name:**
 
