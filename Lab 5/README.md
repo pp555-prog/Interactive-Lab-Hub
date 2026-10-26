@@ -254,9 +254,36 @@ A 0.8B model is slow and sometimes wrong. It will invent events that are not in 
 
 \*\*\***Ask Qwen three questions to answer. Paste the questions, the answers and how long each took. Try one of them with `qwen3:0.6b` and compare.**\*\*\*
 
+I asked three questions whose answers I can check, through `ask_qwen.py` (thinking off, at most three sentences, 120 tokens), first with `qwen3.5:0.8b` and then all three again with `qwen3:0.6b`. The second question is the arithmetic my sleep timer from Part C would need. The third has a wrong premise on purpose: Cornell Tech opened on Roosevelt Island in 2017, not 2005.
+
+| Question | Correct answer | `qwen3.5:0.8b` | `qwen3:0.6b` |
+|---|---|---|---|
+| Tell me a bit about the history of Roosevelt Island. | Blackwell's Island, then Welfare Island, renamed for FDR in 1973; Cornell Tech in 2017 | **Wrong** (17.7 s): a private residence of William Henry Harrison, named by Theodore Roosevelt for his grandfather | **Wrong** (13.8 s): "located in the Pacific Ocean", a 1922 Navy refuge |
+| If I go to bed at 11:40 pm and wake up at 7:15 am, how long did I sleep? | 7 h 35 min | **Wrong** (10.0 s): 16 h 25 min | **Wrong** (0.9 s): 13 h 30 min |
+| Why did Cornell Tech open its Roosevelt Island campus in 2005? | It opened in 2017 | **Accepted the wrong year** (6.1 s) and invented a reason (affordable education for lower-income areas) | **Accepted the wrong year** (2.6 s) and invented a reason |
+| *Image:* `--image snap.jpg` "What is in this photo?" | Me, in a backwards black cap, seen from below | **Mostly right** (31.7 s): "A man wearing a black cap and looking down into the camera." | (text only) |
+
 <details>
-  Q&A here
+<summary>Full answers</summary>
+
+**Roosevelt Island, qwen3.5:0.8b (17.7 s):** Roosevelt Island was originally built as a private residence for William Henry Harrison, who died there in 1840. The island's name was later adopted by President Theodore Roosevelt to honor his grandfather, and it became a major tourist destination in the early 20th century.
+
+**Roosevelt Island, qwen3:0.6b (13.8 s):** Roosevelt Island, located in the Pacific Ocean, was established in 1922 as a temporary refuge for the U.S. Navy. It was initially a temporary naval base and later became a significant research site for the U.S. government and the National Oceanographic and Atmospheric Administration. Today, it remains a symbol of the U.S. commitment to environmental protection and international collaboration.
+
+**Sleep time, qwen3.5:0.8b (10.0 s):** I calculate the time difference between your wake-up time (7:15 am) and your bedtime (11:40 pm). Subtracting these two times gives you a total duration of 16 hours and 25 minutes. This means you slept for approximately 16.4 hours.
+
+**Sleep time, qwen3:0.6b (0.9 s):** You slept for 13 hours and 30 minutes.
+
+**Cornell Tech 2005, qwen3.5:0.8b (6.1 s):** Cornell Tech opened the Roosevelt Island campus to provide students with a more affordable and accessible education for those living in lower-income areas of New York City.
+
+**Cornell Tech 2005, qwen3:0.6b (2.6 s):** Cornell Tech opened its Roosevelt Island campus in 2005 to provide a more convenient and accessible educational experience for students and professionals, especially in the region. The campus is designed to support the growth of the university and its community.
+
+**Photo, qwen3.5:0.8b (31.7 s):** A man wearing a black cap and looking down into the camera.
 </details>
+
+Out of six text answers, none was correct. Both models wrote confident, fluent sentences with invented facts, both got the sleep arithmetic wrong (and differently from each other), and both accepted the wrong year and made up a reason for it. The 0.6b model was faster (0.9–13.8 s vs 6.1–17.7 s; the first 0.8b answer includes loading the model), but not more accurate; it put Roosevelt Island in the Pacific Ocean. The image answer was the best one: it described what it actually saw, even though it took the longest (31.7 s).
+
+What this means for my system: Qwen should never compute or recall anything that matters. My sleep timer will calculate the duration in Python from the two gesture timestamps and give Qwen the finished number, so its only job is to put the facts I give it into a friendly sentence. I will also check its morning report against the log, because it will invent events as readily as it invented Roosevelt Island's history.
 
 
 ## Part E. 
