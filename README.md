@@ -4,7 +4,7 @@
 
 A growing portfolio of hands-on projects exploring the intersection of **embedded systems, physical computing, human–computer interaction, and intelligent devices**.
 
-Developed as part of *INFO 5345 – Developing & Designing Interactive Devices* at Cornell Tech, this repository documents my progression from foundational electronics and hardware prototyping to integrated systems that sense their environments and respond through physical interactions.
+Developed as part of *CS 5424 – Developing & Designing Interactive Devices* at Cornell Tech, this repository documents my progression from foundational electronics and hardware prototyping to integrated systems that sense their environments and respond through physical interactions.
 
 The broader objective is to understand how hardware and software work together to enable increasingly intelligent, context-aware, and autonomous physical devices.
 
