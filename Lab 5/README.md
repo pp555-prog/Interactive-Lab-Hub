@@ -205,6 +205,22 @@ Consider how you might use this position based approach to create an interaction
 
 \*\*\***Include a screenshot or short video of the hand pose demo, and write how you might use face, hand or body pose tracking in your observant system.**\*\*\*
 
+I ran three 25-second trials of `hand_pose.py` on the Pi 5: the pinch volume control, the Quiet Coyote, and the same pinch close to the camera and then at arm's length. MediaPipe tracked my hand at about 15 frames per second. I had no speaker connected, so I followed the volume on the on-screen bar.
+
+<img src="images/partC/pinch-open.png" width="300" alt="Open pinch, volume 96%"/> <img src="images/partC/quiet-coyote.png" width="300" alt="Quiet Coyote gesture recognized, volume muted"/>
+
+*An open pinch set the volume to 96%; the Quiet Coyote muted it.*
+
+The pinch worked as designed: the bar followed my thumb and index finger through 96%, 58%, 50% and 0%. The Quiet Coyote was recognized whenever I made it, and I did not see it trigger on any other pose. Two things broke:
+
+<img src="images/partC/far-pinch.png" width="300" alt="Open pinch at arm's length, volume stuck at 8%"/> <img src="images/partC/missed-hand.png" width="300" alt="Open moving hand with no landmarks detected"/>
+
+*At arm's length, a fully open pinch only reached 8%. A moving open hand was not detected at all.*
+
+* **Distance changes the meaning of a gesture.** The rules are written in pixels: volume maps a 50–300 px thumb-to-index gap, and the Quiet Coyote checks for gaps over or under 100 px. At arm's length my whole hand is small, so a fully open pinch only reached about 60–135 px and the bar stayed at 0–8%. Close to the camera, with my hand partly over my face, the landmarks bunched up and read as a closed pinch. Measuring gaps relative to the size of the hand (for example, the wrist-to-knuckle length) would make the same gesture mean the same thing at any distance.
+* **A moving hand can disappear.** When I opened my hand and moved it, MediaPipe found no hand at all, and the volume simply stayed where it was (muted). The system does nothing when it sees nothing, so a missed gesture is silent.
+
+**How I would use it in my observant system:** the Quiet Coyote becomes the on/off switch for the night. At bedtime I make the gesture at the device, and it starts timing my sleep. In the morning I make the same gesture again, and it stops and reports how long I slept. A deliberate, unusual hand shape is a good trigger because I would not make it by accident. The camera only needs to see my hand at the device, not my bed. From these trials, I would require the gesture to be held for about a second before it counts, use hand-size-relative distances so it works wherever I stand, and give a clear acknowledgement (a tone or a dimming light) so I know it registered, because a missed gesture is otherwise invisible.
 
 ## Part D. 
 ### Reason: run Qwen on the Pi with Ollama
