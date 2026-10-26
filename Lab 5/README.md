@@ -160,7 +160,24 @@ Then press q to quit and run it again with a flag. Each one changes a single thi
 
 \*\*\***Include a short video or screenshots of your experiments with the person detection. Write down three situations where it did not see you, or saw a person who was not there, and what you think the cause was.**\*\*\*
 
+I ran seven 20-second trials on the Pi 5 with the webcam on my desk, each with a spoken cue telling me what to do: walking in and out, turning my back, holding up a phone photo, showing only part of my body, sitting close and then moving to the far side of the room, holding up objects with `--all`, and sitting still with `--headless`. With the window open, the detector ran at about 6.5 readings per second; headless it ran at about 8.5.
 
+<img src="images/partB/back.png" width="260" alt="Back turned to the camera, detected as person 0.93"/> <img src="images/partB/close.png" width="260" alt="Sitting close to the camera, person 0.93"/> <img src="images/partB/far-side.png" width="260" alt="Far side of the room, person 0.92"/>
+
+*Back turned (0.93), close to the camera (0.93), and at the far side of the room (0.92).*
+
+What worked better than I expected: turning my back did not fool it at all (0.89–0.94 on every frame), and raising the bar to `--conf 0.7` did not lose me even at the far side of the room, where my box shrank from 479 px to 151 px tall.
+
+**Failure modes**
+
+<img src="images/partB/phone-photo.png" width="260" alt="A phone photo of a person detected as person 0.55"/> <img src="images/partB/hand-only.png" width="260" alt="A hand alone at the frame edge detected as person 0.84"/> <img src="images/partB/lens-covered.png" width="260" alt="Arm covering the lens, no detection"/>
+
+*Phone photo (person 0.55), a hand alone (person 0.84), and my arm covering the lens (nothing).*
+
+1. **It saw a person who was not there: a photo on my phone.** With me out of frame and only my phone photo visible, it reported a person at 0.40–0.83, and often two or three "people" at once: the photo, plus my hand and arm as separate partial people. My guess at the cause: YOLO matches what a person looks like in a flat image. It has no sense of depth or liveness, so a picture of a person *is* a person to it.
+2. **A hand alone became a whole person.** With `--conf 0.2`, my hand at the edge of the frame was detected as "person" at 0.84. The person class includes partial bodies, so this is "correct" for YOLO, but in Part E's interpreter the hand would become `1 person(s) at left/far`, because the box is small. A small box no longer means far away.
+3. **It did not see me when I was too close.** While I was adjusting the camera during a setup run, my arm covered the lens and it reported 0 people, even though I was right there. My guess: at that range there is no recognizable body outline, just skin and blur.
+4. **With `--all`, it misnamed my objects.** I held up a water glass and a milk bottle. The milk bottle was detected as "bottle" (0.41–0.93), but the water glass kept flipping between "cup" and "wine glass" (0.40–0.52) from frame to frame. My phone was never labeled "cell phone"; it showed up twice as "remote". There were also single-frame labels for "sink" and "laptop". My guess: the objects are small at the model's 320 px input size, and a clear glass has few features, so the label changes between similar classes.
 
 ## Part C. 
 ### See more: hands and pose with MediaPipe
