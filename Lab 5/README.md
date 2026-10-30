@@ -318,7 +318,7 @@ Qwen (18.4 s):
 One person came in from the right, moved close to the camera, and left after about half a minute. ...
 ```
 
-I ran the pipeline for 60 seconds with a planned sequence: stay out of frame for 10 seconds, walk in and stand back on my right, come close to the center at 25 seconds, and leave at 45 seconds. This is the log it wrote:
+I ran the pipeline for 60 seconds with a planned sequence: stay out of frame for 10 seconds, walk in and stand back on the camera's right, come close to the center at 25 seconds, and leave at 45 seconds. This is the log it wrote:
 
 ```
 19:44:22 nobody
@@ -330,7 +330,7 @@ Qwen (11.6 s): *"There was initially no one present. A single person appeared at
 
 Qwen summarized the log correctly. The log itself, though, lost most of what I did, and the interpreter explains why:
 
-* **My right is the camera's left.** The camera faces me, so "right" in the reading means the right of the image, not mine.
+* **I stood on the camera's right, but it logged "left."** Either the webcam mirrors its image (`yolo_to_qwen.py` does not flip it back), or I was not far enough to the right to leave the left third of the frame. This run cannot tell the two apart.
 * **I was never "far."** Even standing back, my box was taller than 60% of the frame. I probably wasn't far enough back, and 60% is a lot for a webcam in a small room.
 * **Walking to the center left no trace.** I stayed "close" and probably never crossed out of the left third, so the reading never changed, and the log only writes a line when it changes.
 
