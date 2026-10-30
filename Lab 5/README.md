@@ -318,6 +318,45 @@ Qwen (18.4 s):
 One person came in from the right, moved close to the camera, and left after about half a minute. ...
 ```
 
+I ran the pipeline for 60 seconds with a planned sequence: stay out of frame for 10 seconds, walk in and stand back on my right, come close to the center at 25 seconds, and leave at 45 seconds. This is the log it wrote:
+
+```
+19:44:22 nobody
+19:44:39 1 person(s) at left/close
+19:45:15 nobody
+```
+
+Qwen (11.6 s): *"There was initially no one present. A single person appeared at 19:44:39 near the left side of the room, but they were gone by 19:45:15. No other activity or changes occurred during this observation period."*
+
+Qwen summarized the log correctly. The log itself, though, lost most of what I did, and the interpreter explains why:
+
+* **My right is the camera's left.** The camera faces me, so "right" in the reading means the right of the image, not mine.
+* **I was never "far."** Even standing back, my box was taller than 60% of the frame. I probably wasn't far enough back, and 60% is a lot for a webcam in a small room.
+* **Walking to the center left no trace.** I stayed "close" and probably never crossed out of the left third, so the reading never changed, and the log only writes a line when it changes.
+
+Three lines out of a minute of movement: the model can only be as good as the words the interpreter gives it.
+
+**An empty log.** In two earlier runs I was not in front of the camera, and the log was a single `nobody` line. Qwen got the count right both times but padded the answer with things that were not in the log, such as *"a line appeared on the detector's screen at 19:37:17, which indicates a change in state rather than an actual person."* The first of those answers took 88 s, because the model was loading after a reboot. The second took 10.8 s.
+
+**Does it notice contradictions?** I edited the real log by hand to add three impossible lines and fed it back with `--log`:
+
+```
+19:44:22 nobody
+19:44:39 1 person(s) at left/close
+19:44:51 2 person(s) at right/far       <- two people, one position
+19:45:02 nobody
+19:45:02 1 person(s) at center/close    <- nobody and someone in the same second
+19:44:30 1 person(s) at left/far        <- time goes backwards
+19:45:15 nobody
+```
+
+| Question | Qwen's answer | What's wrong |
+|---|---|---|
+| The default question (9.6 s) | "There are currently 2 people present in the room. One person was located on the left side of the room, while another was on the right side. No other changes were made to the scene during this observation period." | The log ends with nobody. It merged lines from different times into two people at once, said nothing changed, and noticed none of the contradictions. |
+| "Is anything in this log inconsistent or impossible? Point to the lines." (14.2 s) | It flagged that 19:45:02 appears twice, and said the `nobody` at 19:44:22 contradicts the lines "recorded immediately before it." | It found one of the three, and only as a "duplicate entry." The second claim is invented: 19:44:22 is the first line. It missed the backwards timestamp and the two people with one position. |
+
+So the model does not check its input. Asked an open question, it trusts the log completely. Asked to look for problems, it finds some and invents others. For my overnight system, the checks go in code before the prompt: timestamps must move forward, the number of people must match the number of positions, and gaps in the log are reported as gaps. Qwen only gets a log that has already passed those checks.
+
 ---
 
 # Lab 5 Part 2: Overnight Sensation
