@@ -330,7 +330,7 @@ Qwen (11.6 s): *"There was initially no one present. A single person appeared at
 
 Qwen summarized the log correctly. The log itself, though, lost most of what I did, and the interpreter explains why:
 
-* **I stood on the camera's right, but it logged "left."** Either the webcam mirrors its image (`yolo_to_qwen.py` does not flip it back), or I was not far enough to the right to leave the left third of the frame. This run cannot tell the two apart.
+* **I stood on the camera's right, but it logged "left," because my webcam mirrors its image.** I checked with a second test: standing on the camera's right, my box was at the far left edge of the frame (its center at 3–9% of the width). `yolo_to_qwen.py` does not flip the frame back, so every "left" in my logs is the room's right, and the reverse. Flipping the frame with `cv2.flip(frame, 1)` before YOLO should fix it; I have not tested that yet.
 * **I was never "far."** Even standing back, my box was taller than 60% of the frame. I probably wasn't far enough back, and 60% is a lot for a webcam in a small room.
 * **Walking to the center left no trace.** I stayed "close" and probably never crossed out of the left third, so the reading never changed, and the log only writes a line when it changes.
 
