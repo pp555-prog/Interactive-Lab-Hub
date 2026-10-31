@@ -4,7 +4,7 @@
 
 **Project name:** Quiet Coyote Sleep Tracker
 
-**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard and Verplank diagram were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references.
+**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard, the Verplank diagram and the revised storyboard were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references; Claude Code corrected a few small text errors in them by hand. For the screen design, Higgsfield mood-board images set the colors, and Claude Code wrote the display code from my design and ran it on the Pi while I judged the result.
 
 <details>
 	<summary><strong>Instructions for Students (Click to Expand)</strong></summary>
@@ -409,7 +409,27 @@ The gesture comes from Part C, where the Quiet Coyote never fired by accident. P
 3. Decide where the device will spend the night and who else lives there. Get their OK before the first run.
 4. Revise your storyboard with the feedback and with what you learned in Part E about where the pipeline breaks.
 
+**Feedback:** the feedback on my storyboard was that the screen felt flat. It only showed state words (DORMANT, GOODNIGHT, NIGHT, ALARM), which does not fit a device that sits next to the bed and is meant to calm me down. That is what made me change the display design. Instead of words, the screen now shows the sky:
+
+* **Day:** the sky, sun and moon follow the real time, with the clock and the alarm time in small text.
+* **Good night:** after the Quiet Coyote, the sun sets, the stars come out and "Good night" fades in.
+* **Night:** the screen dims to a moonlit sky. The moon crosses the screen between bedtime and the alarm, so a glance shows how much of the night is left.
+* **Alarm:** the screen brightens into a sunrise and shows the alarm time.
+* **Morning:** a morning sky with how long I slept and a timeline of the night with one tick per event. With no data, it says the night was not tracked.
+
+<img src="images/prep/sky-screens.png" width="600" alt="Day, good night, night, alarm, morning report and no-data screens"/>
+
+*Frames from my display code, enlarged 2×: day, good night, night, alarm, the morning report, and the report for a night with no data.*
+
+I ran all the screens on the Mini PiTFT. The animations were smooth (17–18 frames per second), the text was readable at arm's length, and the night screen was dim enough for a dark bedroom.
+
+**Where the device spends the night:** on the dresser in my bedroom, with the camera facing the door, not the bed. I live alone, so there is no one else to ask. The night log stays on the Pi.
+
 \*\*\***Post your revised storyboard here.**\*\*\*
+
+<img src="images/prep/storyboard-revised.jpg" width="800" alt="Revised six-panel storyboard with the sky screens"/>
+
+The interaction is the same. The changes are the screens: each panel now shows the sky scene for that moment instead of a state word. What I learned in Part E was already in the first version: the camera faces the door, the webcam image has to be flipped, the sleep time is computed in code and the log is checked before Qwen sees it, and an empty log is reported as an untracked night. The box at the bottom right now separates what I have tested on the Pi (the screens) from what I have not (music, alarm, spoken report).
 
 ## Part G. 
 ### Design the interaction before
