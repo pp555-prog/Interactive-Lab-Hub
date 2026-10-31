@@ -398,7 +398,6 @@ Use storyboards and/or [Verplank diagrams](https://ccrma.stanford.edu/courses/25
 
 The gesture comes from Part C, where the Quiet Coyote never fired by accident. Part C also showed that a gesture measured in pixels changes meaning with distance, so I will require it to be held for about a second and measure it relative to the size of the hand. Part E shaped the rest. The camera faces the door, not the bed, and the image has to be flipped because my webcam mirrors it. The sleep time is computed in code from the two gestures, and the log is checked in code before Qwen sees it, because Qwen got simple arithmetic wrong in Part D and missed contradictions in Part E. Qwen only puts the facts into words. If the log is empty or missing, the report has to say the night could not be tracked, not that nothing happened. The spoken lines, the 7:00 alarm, the 15-second check interval and the sample report in the images are placeholders. None of this is built or tested yet.
 
-*AI assistance:* the concept and the interaction are mine. Claude Code generated the storyboard and the Verplank diagram with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references, and drafted this text under my direction.
 
 ## Prep for Part 2
 
