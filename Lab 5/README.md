@@ -2,7 +2,9 @@
 
 **Members:** Pablo Penalba (pp555)
 
-**Project name:**
+**Project name:** Quiet Coyote Sleep Tracker
+
+**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard and Verplank diagram were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references.
 
 <details>
 	<summary><strong>Instructions for Students (Click to Expand)</strong></summary>
