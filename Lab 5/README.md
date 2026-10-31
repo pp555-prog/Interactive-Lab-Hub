@@ -385,6 +385,21 @@ Use storyboards and/or [Verplank diagrams](https://ccrma.stanford.edu/courses/25
 
 \*\*\***Insert ideas, sketches, Verplank diagrams and storyboards for your night-time interaction here.**\*\*\*
 
+**My idea: the Quiet Coyote Sleep Tracker**, a sleep tracker and sleep aid that I hand the night over to with one gesture.
+
+* **During the day** the device is dormant and shows its state on the Pi screen. I will design the display later.
+* **Before bed** I make the Quiet Coyote at the camera. The screen changes and the device speaks to acknowledge that the night has been handed over.
+* **While I sleep** it plays soft music to help me fall asleep and checks in a loop whether there are people in the camera's view, logging only the changes.
+* **In the morning** it plays an alarm at a preset time. I turn it off with the same Quiet Coyote gesture. The device tells me how long I slept and what happened during the night, then returns to dormant.
+
+<img src="images/partF/storyboard.jpg" width="800" alt="Six-panel storyboard: dormant by day, Quiet Coyote at bedtime, music and doorway checks at night, alarm, Quiet Coyote to stop it, spoken morning report"/>
+
+<img src="images/partF/verplank.jpg" width="800" alt="Verplank Do/Feel/Know diagram of the Quiet Coyote Sleep Tracker with its state sequence and pipeline"/>
+
+The gesture comes from Part C, where the Quiet Coyote never fired by accident. Part C also showed that a gesture measured in pixels changes meaning with distance, so I will require it to be held for about a second and measure it relative to the size of the hand. Part E shaped the rest. The camera faces the door, not the bed, and the image has to be flipped because my webcam mirrors it. The sleep time is computed in code from the two gestures, and the log is checked in code before Qwen sees it, because Qwen got simple arithmetic wrong in Part D and missed contradictions in Part E. Qwen only puts the facts into words. If the log is empty or missing, the report has to say the night could not be tracked, not that nothing happened. The spoken lines, the 7:00 alarm, the 15-second check interval and the sample report in the images are placeholders. None of this is built or tested yet.
+
+*AI assistance:* the concept and the interaction are mine. Claude Code generated the storyboard and the Verplank diagram with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references, and drafted this text under my direction.
+
 ## Prep for Part 2
 
 1. Look at and give feedback on the Part F storyboards.
