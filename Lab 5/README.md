@@ -387,7 +387,7 @@ Use storyboards and/or [Verplank diagrams](https://ccrma.stanford.edu/courses/25
 
 **My idea: the Quiet Coyote Sleep Tracker**, a sleep tracker and sleep aid that I hand the night over to with one gesture.
 
-* **During the day** the device is dormant and shows its state on the Pi screen. I will design the display later.
+* **During the day** the device is dormant and shows its state on the Pi screen.
 * **Before bed** I make the Quiet Coyote at the camera. The screen changes and the device speaks to acknowledge that the night has been handed over.
 * **While I sleep** it plays soft music to help me fall asleep and checks in a loop whether there are people in the camera's view, logging only the changes.
 * **In the morning** it plays an alarm at a preset time. I turn it off with the same Quiet Coyote gesture. The device tells me how long I slept and what happened during the night, then returns to dormant.
