@@ -440,16 +440,15 @@ The hand-off: the person tells the device what to watch tonight, and the device 
 
 **The hand-off is the Quiet Coyote.** When I am ready for bed, I stand in front of the device and make the Quiet Coyote at the camera. I chose it because in Part C it never fired on any other pose, so I cannot hand the night over by accident. I hold it for about a second, and the device measures it relative to the size of my hand, so it works whether I stand close or a step back.
 
-**The acknowledgement is light going down and a voice.** As soon as the gesture is recognized:
+**Then I set the alarm by voice.** As soon as the gesture is recognized, the device asks: "Good night. What time should I wake you?" I answer with a time, for example "seven fifteen", and it reads it back with the part of the day: "Alarm set for 7 15 in the morning. Say no to change it." If I stay quiet, it says "Okay. I'm tracking your sleep." If it misheard me, I say "no" and it asks again, or I say "no, seven oh five" and it takes the new time. If it does not understand me at all, it asks again, and after three tries it keeps the last alarm time and says which one, so I never go to bed without knowing when it will ring.
 
-1. **The screen sets like the sun.** The day sky turns to sunset, the stars come out and "Good night" fades in. Over a few seconds the screen dims to its night level.
-2. **The device speaks:** "Good night. I'm tracking your sleep." Then the soft music starts.
+**The acknowledgement is light going down and a voice.** While we talk, the screen sets like the sun: the day sky turns to sunset, the stars come out and "Good night" fades in, with the alarm time in small text. Once the alarm is confirmed, the screen dims to its night level and the soft music starts.
 
 **The question it sets for the morning:** how long did I sleep, and did anything happen at the door? Bedtime is recorded when the gesture is recognized, and the camera starts checking the doorway every 15 seconds.
 
-**The whole ritual takes under thirty seconds:** walk to the dresser, make the gesture, see the sunset, hear "Good night", go to bed. If the gesture is not recognized, nothing changes: the screen stays on the day sky, so I can see it did not register and try again.
+**The whole ritual takes under thirty seconds:** walk to the dresser, make the gesture, say the wake-up time, hear it confirmed, go to bed. If the gesture is not recognized, nothing changes: the screen stays on the day sky, so I can see it did not register and try again.
 
-The gesture recognition (Part C) and the screens are tested. The one-second hold, the spoken line, the music and recording the bedtime are not built yet.
+All of this is built (`sleep_tracker.py`) and worked in my rehearsals: the one-second hold, the spoken question and read-back, the sunset screen, the lullaby and the bedtime entry in the log. Saying "no" to correct the time has only been tested with scripted answers so far.
 
 ## Part H. 
 ### Incorporate the observant system
