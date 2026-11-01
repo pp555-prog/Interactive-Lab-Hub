@@ -4,7 +4,7 @@
 
 **Project name:** Quiet Coyote Sleep Tracker
 
-**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard, the Verplank diagram and the revised storyboard were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references; Claude Code corrected a few small text errors in them by hand. For the screen design, Higgsfield mood-board images set the colors, and Claude Code wrote the display code from my design and ran it on the Pi while I judged the result.
+**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard, the Verplank diagram and the revised storyboard were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references; Claude Code corrected a few small text errors in them by hand. For the screen design, Higgsfield mood-board images set the colors, and Claude Code wrote the display code from my design and ran it on the Pi while I judged the result. Claude Code also wrote the sleep tracker code (`sleep_tracker.py`, `overnight.py`, `morning.py`, `coyote.py`, `voice.py`, `audio.py`) from my interaction design, calibrated the gesture from my recorded hand data, wrote the hand-made test logs, and proposed fixes after each rehearsal, which I chose between. The lullaby and the sunrise alarm song were generated in Suno from prompts that Claude Code drafted and I used. Claude Code designed the enclosure CAD from my request and generated the two "Looks like" concept renders with Higgsfield from that CAD model.
 
 <details>
 	<summary><strong>Instructions for Students (Click to Expand)</strong></summary>
@@ -464,6 +464,37 @@ Fake a night first: run it for thirty seconds while you walk around, stop it, an
 
 \*\*\***Screenshots or videos of the running system.**\*\*\*
 
+**Videos of my rehearsals:** [Lab 5 videos folder](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%20Videos/Lab%205?d=wfa7fb1c27d5540feb8849c7db1ea7464&csf=1&web=1&e=3Qy59r)
+
+**Fake night with the starter code.** I ran the original `overnight.py` in tmux for 30 seconds while I walked in and out of view twice, then the original `morning.py`:
+
+<img src="images/partH/fake-night.png" width="700" alt="tmux window: overnight.py stopped with Ctrl-C, then morning.py's report"/>
+
+The log was right: nobody, then me at center/far and center/close, nobody, me again, nobody. Qwen's report was not. It said that "only one person remained at the center of the room throughout" an interval "between 16:44 and 16:44", although I left in between, so there were two separate visits. This is the Part D and Part E lesson again, and it shaped Part I: the morning facts must come from code, not from the model.
+
+**My night shift.** I rewrote `overnight.py` for my design:
+
+* **Flip the frame** before YOLO, because my webcam mirrors its image (Part E).
+* **One look every 15 seconds**, plus a **motion trigger**: every half second it compares a tiny blurred copy of the frame, and if more than 2% of it changes, it looks right away. In my first rehearsal I walked past the camera and the log only said "nobody", because a few seconds of walking fell between two looks. With the trigger, the next rehearsal logged me at a time between the 15-second looks.
+* **No snapshots.** Only the reading in words goes into the log, with a "bedtime" and a "wake" entry, and an "alive" line every 10 minutes so a quiet night can be told apart from a crashed one.
+
+**The whole interaction.** `sleep_tracker.py` runs the night from start to finish in tmux: it waits for the Quiet Coyote, asks for the wake-up time (Part G), plays the lullaby, runs the night shift until the alarm, wakes me with the sunrise screen and song, waits for the Quiet Coyote again and gives the morning report (Part I). The other files are `coyote.py` (the gesture), `voice.py` (Piper and Whisper from Lab 3), `audio.py` (music and alarm with fades), `sky_display.py` (the screens) and `morning.py` (the report).
+
+<img src="images/partH/rehearsal4.png" width="700" alt="tmux window of a full rehearsal: hand-off, alarm read-back, night shift, alarm, Quiet Coyote, morning report"/>
+
+*Rehearsal 4: a five-minute night with every part working.*
+
+I rehearsed the whole night four times with the alarm a few minutes away. Each rehearsal broke something I would not have found by reading the code:
+
+| Rehearsal | What broke | What I changed |
+|---|---|---|
+| 1 | My walk past the door was not logged. Qwen's report said "four minutes of sleep" (right) and that I "made it through your day without needing to leave the room" (invented). | Motion trigger. The facts are now always a template filled in by code. |
+| 2 | Whisper heard "Mmm, 546." without the "pm", and the device said "Alarm set for 5 46", so I could not hear the mistake. Ctrl-C did not stop the whole program. | The read-back always says the part of the day ("in the evening"). Ctrl-C stops everything. |
+| 3 | I said "six o 2" and it set 6:00. I also could not see what the camera saw. The speech stuttered while Qwen was busy. | "Say no to change it" after the read-back, 5 seconds to answer instead of 4, a `--preview` camera window for rehearsals, and speech made before it is played. |
+| 4 | Everything worked; "Good morning" was said twice. | Qwen's line no longer starts with "Good morning". |
+
+To check that rehearsal 3 was not a recognition problem, I let the Pi ask me to say four times and transcribed my recordings with two Whisper models: both got all four right ("602.", "715", "630.", "No, 705."). The miss was timing, so the fix was the read-back and the longer window, not a bigger model.
+
 ## Part I. 
 ### Design the interaction after
 
@@ -475,6 +506,37 @@ The reveal. The night produced a log; the morning turns it into something a half
 
 Make it yours: show the report on the Mini PiTFT, read it aloud with Piper from Lab 3, plot the night as a timeline, or ask for JSON (`--json`, Part D) and move a servo. Whatever you pick, make sure it is honest about a night in which nothing happened.
 
+**The reveal is a sunrise, a song and two sentences.**
+
+1. **Ten minutes before the alarm,** the dim moonlit screen slowly turns into a sunrise and gets brighter.
+2. **At the alarm time,** the sunrise song plays. It starts almost silent and grows over a minute, and it repeats until I make the Quiet Coyote. If I don't, it stops after 20 minutes.
+3. **The Quiet Coyote turns it off,** and the device says "Good morning" and two facts: how long I slept and what happened at the door, for example: *"You slept 7 hours 35 minutes, from 11:25 pm to 7:00 am. Someone came to the door once, at 2:47 am."*
+4. **The screen shows the same report:** the sleep time in large text over a morning sky, and a timeline of the night with a tick for each visit.
+5. **Qwen adds one warm closing line,** for example *"You have a wonderful new day ahead of you."* Then the device goes back to the day sky.
+
+**The facts never come from the model.** Time slept is the wake-up gesture minus the bedtime gesture. A visit is a run of readings that are not "nobody". Qwen is only asked for a closing sentence, it is told nothing about the night, and the sentence is thrown away if it contains a number, a time or anything about the door or visitors. I made this choice after Qwen got the sleep arithmetic wrong in Part D, missed contradictions in Part E, and invented events in my fake night and my first rehearsal.
+
+**Honest about an empty night.** The report says what the log can and cannot support:
+
+| The log shows | The device says |
+|---|---|
+| A watched night with no visits | "Nobody came to the door." |
+| No log at all | "The night was not tracked. I have no log, so I cannot say how you slept or what happened." |
+| More than 15 minutes with no line at all (not even the "alive" line) | "I was not watching from 3:00 am to 4:00 am, so I may have missed something." |
+| Times going backwards or unreadable lines | "Part of the log was out of order or unreadable, so take this with a grain of salt." |
+
+I checked these four cases with hand-made logs, in the same spirit as the edited log in Part E.
+
+**Checking the design against Bellotti et al.'s five questions:**
+
+| Question | My answer |
+|---|---|
+| **Address:** how do I talk to it, and how do I avoid talking to it by accident? | The Quiet Coyote, held for a second. I calibrated it on my hand: other hand shapes never lasted long enough to count (the longest was 0.1 s). |
+| **Attention:** how do I know it is listening? | The screen starts setting like the sun the moment the gesture is recognized, and it asks me a question out loud. |
+| **Action:** how do I tell it what to do? | One gesture means "the night starts" or "I am awake", and the only thing I say is a time. |
+| **Alignment:** how do I know it understood? | It reads the alarm time back with the part of the day, and in the morning the screen and the voice give the same report. |
+| **Accident:** how do I recover from a mistake? | "No" to a wrong time; three failed tries keep the last alarm and say which one; the alarm gives up after 20 minutes; the report says when it was not watching. What it cannot do yet is undo a hand-off made by mistake. |
+
 ## Final documentation
 
 Document all the prototypes and iterations you have designed and worked on. The deliverables for this lab are writings, sketches, photos, and videos that show what your system:
@@ -484,6 +546,42 @@ Document all the prototypes and iterations you have designed and worked on. The 
 * "Acts like": how a person hands the night over and what they get back.
 
 \*\*\***Include a short video of the whole system**\*\*\*
+
+**Video of the whole system:** [Lab 5 videos folder](https://cornellprod-my.sharepoint.com/:f:/r/personal/pp555_cornell_edu/Documents/INFO%205345%20Lab%20Videos/Lab%205?d=wfa7fb1c27d5540feb8849c7db1ea7464&csf=1&web=1&e=3Qy59r)
+
+Houde and Hill's *What do Prototypes Prototype?* separates three questions: the **role** the device plays in someone's life, its **look and feel**, and its **implementation**. My prototypes answer them separately, and the rehearsals put them together.
+
+### Looks like (look and feel)
+
+The working prototype is a Pi on a desk with cables, so to show how it would sit in a bedroom I designed an enclosure and made two concept renders of it.
+
+<img src="images/final/bedtime.jpg" width="420" alt="Concept render: the enclosure on a dresser at night, screen showing a dim moonlit sky, webcam on top facing the door"/> <img src="images/final/morning.jpg" width="420" alt="Concept render: the enclosure in morning light, screen showing 'you slept 7 h 35 min' with the night's timeline"/>
+
+*Concept renders (generated with Higgsfield from my CAD model and my real screen designs), not photos: at bedtime the screen is a dim moonlit sky and the webcam faces the door; in the morning it shows the report.*
+
+The enclosure is a small off-white box (96 × 84 × 32 mm) for the Pi 5. The board stands upright so the Mini PiTFT looks out through a window in the front, two hills like the ones on the screen are recessed into the front face, the USB ports face a cut-out on the right for the webcam, microphone and speaker, and the webcam clips on the flat top. It is two printed parts: a shell, printed front face down, and a back plate with the standoffs for the Pi. The power cable leaves through a notch in the back plate.
+
+<img src="cad/preview.png" width="700" alt="CAD preview of the enclosure from the front and the back, with the Pi, screen and webcam as blocks"/>
+
+<img src="cad/drawing.png" width="700" alt="Dimensioned drawing: front, right side and back plate"/>
+
+CAD files: [`cad/enclosure.py`](cad/enclosure.py) (parametric source), [`cad/shell.stl`](cad/shell.stl), [`cad/back_plate.stl`](cad/back_plate.stl). The Pi's hole positions come from the Raspberry Pi 5 drawing; the position of the Mini PiTFT's screen is an estimate that I need to measure before printing it at the MakerLAB.
+
+### Works like (implementation)
+
+The pipeline from Part E, running all night on the Pi:
+
+**camera** (flipped) → **YOLO** person detection every 15 s, or sooner when something moves → **interpreter** (`interpret()` from Part E: "1 person(s) at left/close") → **night log** (`night_log.jsonl`, only changes, plus bedtime, wake and "alive" lines) → **code** computes sleep time, visits and gaps → **Qwen** writes only a closing line → **Piper** speaks the report, and the **Mini PiTFT** shows it.
+
+<!-- The real night's log and report go here after the first real night. -->
+
+### Acts like (role)
+
+The person hands the night over with one gesture and a time, and gets back two facts and a sunrise. The storyboard in Prep for Part 2 shows the whole night; Parts G and I describe the hand-off and the reveal, and the rehearsals in Part H show that it works end to end. The device never needs a phone, an app or a button: the Quiet Coyote starts and ends the night, and the only thing I say is when to wake up.
+
+### Testing with users
+
+I had other people try the hand-off. Setting the time frustrated them: when the device misheard the time, they had no way to tell and no way to fix it. That is why I redesigned that step. The device now reads the time back with the part of the day ("Alarm set for 7 15 in the morning"), gives them 5 seconds instead of 4 to answer, and lets them say "no" to try again or "no, seven oh five" to correct it in one go.
 
 As always, make sure you document contributions and ideas from others (and AI) explicitly in your writeup.
 
