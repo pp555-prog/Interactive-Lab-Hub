@@ -4,7 +4,7 @@
 
 **Project name:** Quiet Coyote Sleep Tracker
 
-**Design and direction:** I designed the Quiet Coyote Sleep Tracker concept and its interaction, chose what to test, and directed the work. I performed every physical trial in front of the camera, reported what I did and saw, and approved each section before it was published. I installed Ollama and pulled the Qwen models myself. **AI assistance:** Under my direction, Claude Code set up the Pi environment (virtual environment, YOLO export), repaired a corrupted OpenCV library, ran the trial commands with audible cues, collected the logs and screenshots, suggested two of the Part D questions, hand-edited the Part E contradiction log, and drafted the report text and image crops. The Part F storyboard, the Verplank diagram and the revised storyboard were generated with Higgsfield (GPT Image 2.5) from my description, using my Lab 3 storyboard and diagram as style references; Claude Code corrected a few small text errors in them by hand. For the screen design, Higgsfield mood-board images set the colors, and Claude Code wrote the display code from my design and ran it on the Pi while I judged the result. Claude Code also wrote the sleep tracker code (`sleep_tracker.py`, `overnight.py`, `morning.py`, `coyote.py`, `voice.py`, `audio.py`) from my interaction design, calibrated the gesture from my recorded hand data, wrote the hand-made test logs, and proposed fixes after each rehearsal, which I chose between. The lullaby and the sunrise alarm song were generated in Suno from prompts that Claude Code drafted and I used. Claude Code designed the enclosure CAD from my request and generated the two "Looks like" concept renders with Higgsfield from that CAD model.
+**AI disclosure:** I designed the Quiet Coyote Sleep Tracker and its interaction, did every trial and user test, and directed and approved all the work. Claude Code helped me set up the Pi, write and debug the code, run the trials, make the storyboards, diagrams, CAD model and concept renders, and draft this report. The lullaby and the alarm song were made with Suno.
 
 <details>
 	<summary><strong>Instructions for Students (Click to Expand)</strong></summary>
@@ -557,7 +557,7 @@ The working prototype is a Pi on a desk with cables, so to show how it would sit
 
 <img src="images/final/bedtime.jpg" width="420" alt="Concept render: the enclosure on a dresser at night, screen showing a dim moonlit sky, webcam on top facing the door"/> <img src="images/final/morning.jpg" width="420" alt="Concept render: the enclosure in morning light, screen showing 'you slept 7 h 35 min' with the night's timeline"/>
 
-*Concept renders (generated with Higgsfield from my CAD model and my real screen designs), not photos: at bedtime the screen is a dim moonlit sky and the webcam faces the door; in the morning it shows the report.*
+*Concept renders made from my CAD model and my real screen designs, not photos: at bedtime the screen is a dim moonlit sky and the webcam faces the door; in the morning it shows the report.*
 
 The enclosure is a small off-white box (96 × 84 × 32 mm) for the Pi 5. The board stands upright so the Mini PiTFT looks out through a window in the front, two hills like the ones on the screen are recessed into the front face, the USB ports face a cut-out on the right for the webcam, microphone and speaker, and the webcam clips on the flat top. It is two printed parts: a shell, printed front face down, and a back plate with the standoffs for the Pi. The power cable leaves through a notch in the back plate.
 
