@@ -24,6 +24,16 @@ import time
 
 import cv2
 
+
+HOT, COOL = 75.0, 70.0      # degrees C: above HOT, look once a minute and stop the motion check until below COOL
+
+
+def cpu_temp():
+    try:
+        return int(open("/sys/class/thermal/thermal_zone0/temp").read()) / 1000
+    except (OSError, ValueError):
+        return None
+
 from yolo_to_qwen import interpret, model      # the interpreter you tuned in Part E
 
 
@@ -59,7 +69,7 @@ def night_shift(stop=lambda: False, interval=15, classes=(0,), snaps=False, alar
         write({"event": "bedtime"})
         if alarm:
             write({"event": "alarm_set", "alarm": alarm.strftime("%H:%M")})
-    last, last_beat = None, 0.0
+    last, last_beat, hot = None, 0.0, False
     print("night shift started, Ctrl-C to stop", flush=True)
     try:
         while not stop():
@@ -81,18 +91,25 @@ def night_shift(stop=lambda: False, interval=15, classes=(0,), snaps=False, alar
                     last = reading
                 if on_frame:
                     on_frame(raw, reading)
+                temp = cpu_temp()
+                if temp is not None and not hot and temp >= HOT:
+                    hot = True                  # the Pi is getting warm: look less often until it cools
+                    write({"event": "hot", "temp": temp})
+                elif hot and temp is not None and temp < COOL:
+                    hot = False
+                    write({"event": "cool", "temp": temp})
                 if time.time() - last_beat > 600:
-                    write({"alive": True})
+                    write({"alive": True, "temp": temp})
                     last_beat = time.time()
             except Exception as e:
                 print("hiccup:", e, flush=True)
-            t_next = time.time() + interval
+            t_next = time.time() + (60 if hot else interval)
             prev = None
             while time.time() < t_next and not stop():
                 if on_tick:
                     on_tick(datetime.datetime.now())
                 time.sleep(min(0.5, max(0.0, t_next - time.time())))
-                if motion:                  # a quick pass can fall between two looks; look early if something moves
+                if motion and not hot:      # a quick pass can fall between two looks; look early if something moves
                     ok, small = cap.read()
                     if ok and on_frame:
                         on_frame(small, last or "looking")

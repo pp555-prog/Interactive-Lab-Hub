@@ -305,7 +305,34 @@ The pipeline from Part E, running all night on the Pi:
 
 **camera** (flipped) → **YOLO** person detection every 15 s, or sooner when something moves → **interpreter** (`interpret()` from Part E: "1 person(s) at left/close") → **night log** (`night_log.jsonl`, only changes, plus bedtime, wake and "alive" lines) → **code** computes sleep time, visits and gaps → **Qwen** writes only a closing line → **Piper** speaks the report, and the **Mini PiTFT** shows it.
 
-<!-- The real night's log and report go here after the first real night. -->
+**My first real night (November 1 to 2).** I started `sleep_tracker.py` in tmux at 10:22 pm. This is what it printed:
+
+```
+22:22:45 Quiet Coyote!
+22:22:45 says: Good night. What time should I wake you?
+22:23:04 says: Alarm set for 8 30 in the morning. Say no to change it.
+22:23:15 says: Okay. I'm tracking your sleep.
+08:30:00 waiting for the Quiet Coyote (alarm)
+08:30:32 Quiet Coyote!
+08:30:32 says: Good morning. You slept 10 hours 8 minutes, from 10:22 pm to 8:30 am. Someone came to the door once, at 10:25 pm.
+08:30:46 says: You have the power to wake your spirit, and I hope for a bright, fresh start to every new day together.
+```
+
+The [night log](night_log.jsonl) has 66 lines: bedtime, the alarm, one visit, an "alive" line every 10 minutes and the wake-up. The first lines:
+
+```
+{"t": "2026-11-01T22:22:45", "event": "bedtime"}
+{"t": "2026-11-01T22:23:20", "event": "alarm_set", "alarm": "08:30"}
+{"t": "2026-11-01T22:23:23", "reading": "nobody"}
+{"t": "2026-11-01T22:23:23", "alive": true, "temp": 57.85}
+{"t": "2026-11-01T22:25:56", "reading": "1 person(s) at left/far"}
+{"t": "2026-11-01T22:26:02", "reading": "nobody"}
+{"t": "2026-11-01T22:33:33", "alive": true, "temp": 44.1}
+```
+
+What worked: the gesture and the time were understood the first time, the lullaby played at a volume that was just right for falling asleep (I had turned it down to 12% before bed), the alarm went off at 8:30, and the report is exactly what the log supports. There are no gaps: the longest stretch between two lines is the 10 minutes between "alive" lines, so the camera was watching all night. The Pi has no fan, so I logged its temperature: it stayed between 39 °C and 58 °C, far from the 75 °C at which my code slows down and the 85 °C at which the Pi throttles itself.
+
+What it shows about the design: "10 hours 8 minutes" is time in bed, from the bedtime gesture to the wake-up gesture, not time asleep. The camera cannot tell when I fell asleep. The one visit, three minutes after the hand-off, was me still moving around the room, so the first minutes after bedtime should not count as visitors. And Qwen's closing line passed my filter but is a strange sentence for 8:30 am, which supports keeping the model out of the facts.
 
 ### Acts like (role)
 
@@ -319,4 +346,4 @@ I had other people try the hand-off. Setting the time frustrated them: when the 
 
 * Code: [`sleep_tracker.py`](sleep_tracker.py) (the whole interaction), [`overnight.py`](overnight.py) (night shift), [`morning.py`](morning.py) (report), [`coyote.py`](coyote.py) (gesture), [`voice.py`](voice.py) (speech in and out), [`audio.py`](audio.py) (lullaby and alarm), [`sky_display.py`](sky_display.py) (screens), and the starter [`yolo_to_qwen.py`](yolo_to_qwen.py) for `interpret()`.
 * Enclosure: [`cad/`](cad/) (parametric source, STL files, renders and drawing).
-* Night log: `night_log.jsonl` (added after the first real night).
+* Night log: [`night_log.jsonl`](night_log.jsonl) (my first real night, November 1 to 2).

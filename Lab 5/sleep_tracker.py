@@ -160,7 +160,7 @@ def one_night(args, cap, gesture, screen, preview):
     time.sleep(max(0.0, 8 - (time.time() - screen.since)))          # let the sunset finish
 
     # Night: lullaby that fades out, and the doorway check until the alarm.
-    music = audio.Player(args.lullaby, loop=True, gain=0.5, stop_after=args.music_minutes * 60,
+    music = audio.Player(args.lullaby, loop=True, gain=args.music_volume, stop_after=args.music_minutes * 60,
                          fade_out=min(60, args.music_minutes * 20)).start()
     screen.set("night", bedtime=bedtime, alarm=alarm)
     overnight.night_shift(stop=lambda: datetime.datetime.now() >= alarm, interval=args.interval,
@@ -204,6 +204,7 @@ def main():
     parser.add_argument("--once", action="store_true", help="one night, then exit")
     parser.add_argument("--alarm-in", type=float, help="rehearsal: skip the question, alarm in N minutes")
     parser.add_argument("--music-minutes", type=float, default=30)
+    parser.add_argument("--music-volume", type=float, default=0.12, help="lullaby volume, 0..1 (kept very low)")
     parser.add_argument("--alarm-minutes", type=float, default=20, help="give up ringing after this long")
     parser.add_argument("--interval", type=float, default=15)
     parser.add_argument("--report-seconds", type=float, default=60)
