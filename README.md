@@ -38,7 +38,7 @@ The broader objective is to understand how hardware and software work together t
 | Lab 3 – Chatterboxes | Voice-based interaction and conversational interfaces | [View Lab](Lab%203/) |
 | Lab 4 – Ph-UI!!! | Sensor integration, physical actuation, and interactive prototyping | [View Lab](Lab%204/) |
 | Lab 5 – Observant Systems | Sensing, machine perception, and local AI experimentation | [View Lab](Lab%205/) |
-| Lab 6 – Little Interactions Everywhere | Upcoming | [View Lab](Lab%206/) |
+| Lab 6 – Little Interactions Everywhere | Distributed interaction over MQTT: a three-player mouse game (group project) | [View Lab](Lab%206/) |
 | Final Project | Upcoming | — |
 
 ## Featured Prototype: Thirst Nudge
